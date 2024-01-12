@@ -1,0 +1,13 @@
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.cells {
+  display: flex;
+  flex-wrap: wrap;
+  .cell {
+    border: 1px solid #eee;
+  }
+}

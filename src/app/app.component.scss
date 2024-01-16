@@ -1,13 +1,34 @@
 .container {
+  height: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
+  background-color: var(--dark-green);
+  padding: 0;
 }
 
 .cells {
   display: flex;
   flex-wrap: wrap;
+  
   .cell {
-    border: 1px solid #eee;
+    width: 30px;
+    height: 30px;
   }
+}
+
+.snake-cell {
+  background-color: var(--dark-purple);
+}
+
+.food-cell {
+  background-color: var(--dark-red);
+}
+
+.empty-cell-light {
+  background-color: var(--very-light-green);
+}
+
+.empty-cell-middle {
+  background-color: var(--light-green);
 }

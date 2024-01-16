@@ -1,4 +1,5 @@
 .container {
+  height: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -7,7 +8,22 @@
 .cells {
   display: flex;
   flex-wrap: wrap;
+  
   .cell {
     border: 1px solid #eee;
+    width: 30px;
+    height: 30px;
   }
+}
+
+.snake-cell {
+  background-color: green;
+}
+
+.food-cell {
+  background-color: red;
+}
+
+.empty-cell {
+  background-color: #ccc;
 }

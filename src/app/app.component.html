@@ -1,9 +1,9 @@
 <div class="container">
-  <div class="cells" [ngStyle]="cellWidthStyle">
-    <div
-      class="cell"
-      [ngStyle]="getCellStyle(i)"
-      *ngFor="let cell of getCells; let i = index"
-    ></div>
+  <div class="cells">
+    <div *ngFor="let column of columns">
+      <div *ngFor="let row of rows">
+        <div class="cell" [ngClass]="getCellClass(row, column)"></div>
+        </div>
+    </div>
   </div>
 </div>

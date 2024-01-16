@@ -3,6 +3,8 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  background-color: var(--dark-green);
+  padding: 0;
 }
 
 .cells {
@@ -10,20 +12,23 @@
   flex-wrap: wrap;
   
   .cell {
-    border: 1px solid #eee;
     width: 30px;
     height: 30px;
   }
 }
 
 .snake-cell {
-  background-color: green;
+  background-color: var(--dark-purple);
 }
 
 .food-cell {
-  background-color: red;
+  background-color: var(--dark-red);
 }
 
-.empty-cell {
-  background-color: #ccc;
+.empty-cell-light {
+  background-color: var(--very-light-green);
+}
+
+.empty-cell-middle {
+  background-color: var(--light-green);
 }

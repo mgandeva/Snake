@@ -48,10 +48,14 @@ export class AppComponent implements OnInit {
       return 'snake-cell';
     }
 
-    if (this.food.cell === cell) {
+    if (this.food.cell.equals(cell)) {
       return 'food-cell';
     }
 
-    return 'empty-cell';
+    if ((cell.row + cell.column) % 2 == 0) {
+      return 'empty-cell-light';
+    }
+
+    return 'empty-cell-middle';
   }
 }

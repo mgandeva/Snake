@@ -24,8 +24,38 @@ export class Snake {
             if (index === this.headIndex) {
                 return cell.getNeighbour(this.direction);
             }
-            
             return this.body[index - 1];
         });
     }
+
+  grow() {
+    const newTailEnd = this.determineGrowDirection();
+
+    return this.body.push(new Cell(newTailEnd.row, newTailEnd.column));
+  }
+
+  private determineGrowDirection() {
+    switch (this.direction) {
+      case Direction.RIGHT:
+        return {
+          row: this.body[this.body.length - 1].row,
+          column: this.body[this.body.length - 1].column - 1,
+        };
+      case Direction.LEFT:
+        return {
+          row: this.body[this.body.length - 1].row,
+          column: this.body[this.body.length - 1].column + 1,
+        };
+      case Direction.UP:
+        return {
+          row: this.body[this.body.length - 1].row + 1,
+          column: this.body[this.body.length - 1].column,
+        };
+      case Direction.DOWN:
+        return {
+          row: this.body[this.body.length - 1].row - 1,
+          column: this.body[this.body.length - 1].column,
+        };
+    }
+  }
 }

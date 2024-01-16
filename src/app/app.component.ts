@@ -2,7 +2,11 @@ import { Component, HostListener, OnInit } from '@angular/core';
 import { Food } from './models/food.model';
 import { Snake } from './models/snake.model';
 import { Cell } from './models/cell.model';
-import { GRID_COLUMNS, GRID_ROWS, STEP_TIME } from './constants/game-settings.constants';
+import {
+  GRID_COLUMNS,
+  GRID_ROWS,
+  STEP_TIME,
+} from './constants/game-settings.constants';
 import { SnakeService } from './services/snake.service';
 import { getDirection } from './utilities/direction.utility';
 
@@ -22,13 +26,11 @@ export class AppComponent implements OnInit {
 
   ngOnInit(): void {
     const runTime = () => {
-      setTimeout(
-        () => {
-          this.snake.move();
-          runTime();
-        }, 
-        STEP_TIME
-      );
+      setTimeout(() => {
+        this.snake.move();
+        this.eatFood();
+        runTime();
+      }, STEP_TIME);
     };
 
     runTime();
@@ -57,5 +59,16 @@ export class AppComponent implements OnInit {
     }
 
     return 'empty-cell-middle';
+  }
+
+  eatFood() {
+    const snakeHead = this.snake.body[0];
+    if (
+      snakeHead.row === this.food.cell.row &&
+      snakeHead.column === this.food.cell.column
+    ) {
+      this.snake.grow();
+      this.food.generateRandomFood(this.snake);
+    }
   }
 }

@@ -18,15 +18,15 @@ export class SnakeService {
       givenDirection: Direction
     ): boolean {
       const directions = [wantedDirection, givenDirection];
-      
-      const filteredRowAsics = directions.filter(
-        direction => direction === Direction.LEFT || 
+
+      const filteredRowAxes = directions.filter(direction => 
+        direction === Direction.LEFT || 
         direction === Direction.RIGHT
       ).length;
 
-      const onTheSameAsixs =
-      filteredRowAsics === 2 || filteredRowAsics === 0;
+      const onTheSameAxis =
+      filteredRowAxes === 2 || filteredRowAxes === 0;
   
-      return !onTheSameAsixs;
+      return !onTheSameAxis;
     }
 }

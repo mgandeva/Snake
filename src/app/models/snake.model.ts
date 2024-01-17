@@ -30,33 +30,8 @@ export class Snake {
   }
 
   grow() {
-    const newTailEnd = this.determineGrowDirection();
+    const tailEnd = this.body[this.body.length - 1];
 
-    return this.body.push(new Cell(newTailEnd.row, newTailEnd.column));
-  }
-
-  private determineGrowDirection() {
-    switch (this.direction) {
-      case Direction.RIGHT:
-        return {
-          row: this.body[this.body.length - 1].row,
-          column: this.body[this.body.length - 1].column - 1,
-        };
-      case Direction.LEFT:
-        return {
-          row: this.body[this.body.length - 1].row,
-          column: this.body[this.body.length - 1].column + 1,
-        };
-      case Direction.UP:
-        return {
-          row: this.body[this.body.length - 1].row + 1,
-          column: this.body[this.body.length - 1].column,
-        };
-      case Direction.DOWN:
-        return {
-          row: this.body[this.body.length - 1].row - 1,
-          column: this.body[this.body.length - 1].column,
-        };
-    }
+    return this.body.push(new Cell(tailEnd.row, tailEnd.column));
   }
 }

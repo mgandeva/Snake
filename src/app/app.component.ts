@@ -21,6 +21,7 @@ export class AppComponent implements OnInit {
 
   rows: number[] = [...Array(GRID_ROWS).keys()];
   columns: number[] = [...Array(GRID_COLUMNS).keys()];
+  score = 0;
 
   constructor(private snakeService: SnakeService) {}
 
@@ -68,6 +69,7 @@ export class AppComponent implements OnInit {
       snakeHead.column === this.food.cell.column
     ) {
       this.snake.grow();
+      this.score += 10;
       this.food.generateRandomFood(this.snake);
     }
   }

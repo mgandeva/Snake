@@ -1,9 +1,16 @@
+<link
+  href="https://fonts.googleapis.com/css?family=Press Start 2P"
+  rel="stylesheet"
+/>
 <div class="container">
   <div class="cells">
     <div *ngFor="let column of columns">
       <div *ngFor="let row of rows">
         <div class="cell" [ngClass]="getCellClass(row, column)"></div>
-        </div>
+      </div>
     </div>
+  </div>
+  <div class="scores">
+    <p>Current Score: {{ score }}</p>
   </div>
 </div>

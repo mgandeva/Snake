@@ -29,8 +29,7 @@ export class Cell {
         return this.row === cell.row && this.column === cell.column;
     }
 
-    private normalize()
-    {
+    private normalize() {
         if (this.row < 0) {
             this.row = GRID_ROWS - 1;
         }

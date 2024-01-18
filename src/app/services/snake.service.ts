@@ -7,26 +7,28 @@ import { Direction } from "../enums/direction.enum";
 })
 export class SnakeService {
     changeDirection(snake: Snake, direction: Direction) {
-        const canChangeDirection = this.canChangeDirection(direction, snake.facing);
+        const canChangeDirection = this.canChangeDirection(
+            direction,
+            snake.getFacing()
+        );
         if (canChangeDirection) {
-            snake.direction = direction;
+            snake.setMovementDirection(direction);
         }
     }
 
     private canChangeDirection(
-      wantedDirection: Direction,
-      givenDirection: Direction
+        wantedDirection: Direction,
+        givenDirection: Direction
     ): boolean {
-      const directions = [wantedDirection, givenDirection];
+        const directions = [wantedDirection, givenDirection];
 
-      const filteredRowAxes = directions.filter(direction => 
-        direction === Direction.LEFT || 
-        direction === Direction.RIGHT
-      ).length;
+        const filteredRowAxes = directions.filter(direction => 
+            direction === Direction.LEFT || 
+            direction === Direction.RIGHT
+        ).length;
 
-      const onTheSameAxis =
-      filteredRowAxes === 2 || filteredRowAxes === 0;
-  
-      return !onTheSameAxis;
+        const onTheSameAxis = filteredRowAxes === 2 || filteredRowAxes === 0;
+
+        return !onTheSameAxis;
     }
 }

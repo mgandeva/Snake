@@ -7,7 +7,7 @@ import { Direction } from "../enums/direction.enum";
 })
 export class SnakeService {
     changeDirection(snake: Snake, direction: Direction) {
-        const canChangeDirection = this.canChangeDirection(direction, snake.direction);
+        const canChangeDirection = this.canChangeDirection(direction, snake.facing);
         if (canChangeDirection) {
             snake.direction = direction;
         }

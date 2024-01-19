@@ -26,7 +26,9 @@ export class AppComponent implements OnInit {
       setTimeout(
         () => {
           this.snake.move();
-          runTime();
+          if(!this.isGameOver()){
+            runTime();
+          }
         }, 
         STEP_TIME
       );
@@ -58,5 +60,9 @@ export class AppComponent implements OnInit {
     }
 
     return 'empty-cell-middle';
+  }
+
+  isGameOver(): boolean {
+    return false;
   }
 }

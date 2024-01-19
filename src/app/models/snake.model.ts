@@ -1,30 +1,38 @@
 import { Direction } from "../enums/direction.enum";
 import { Cell } from "./cell.model";
-
-const INITIAL_SNAKE_COORDINATES = [
-    new Cell(0, 7),
-    new Cell(0, 6),
-    new Cell(0, 5)
-];
+import { Grid } from "./grid.model";
 
 export class Snake {
     private headIndex: number = 0;
+    private body: Cell[];
+    private facing: Direction = Direction.RIGHT;
+    private movementDirection: Direction = Direction.RIGHT;
 
-    direction: Direction = Direction.RIGHT;
-    facing: Direction = this.direction;
-    body: Cell[] = INITIAL_SNAKE_COORDINATES;
+    constructor(grid: Grid){
+        this.body = [grid.getCell(0, 7), grid.getCell(0,6), grid.getCell(0,5)];
+    }
+
+    getFacing() : Direction {
+        return this.facing;
+    }
+
+    getMovementDirection() : Direction {
+        return this.movementDirection;
+    }
+
+    setMovementDirection(direction: Direction): void {
+        this.movementDirection = direction;
+    }
   
     containsCell(cell: Cell): boolean {
-      return this.body.some(snakeCell => 
-        snakeCell.row === cell.row && 
-        snakeCell.column === cell.column);
+      return this.body.some(snakeCell => snakeCell === cell);
     }
   
     move() {
         this.body = this.body.map((cell: Cell, index: number) => {
             if (index === this.headIndex) {
-                this.facing = this.direction;
-                return cell.getNeighbour(this.direction);
+                this.facing = this.movementDirection;
+                return cell.getNeighbour(this.movementDirection);
             }
             
             return this.body[index - 1];

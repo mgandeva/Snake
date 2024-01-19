@@ -1,9 +1,9 @@
-import { Cell } from "./cell.model";
+import { Cell } from './cell.model';
 
 export class Food {
-  public cell: Cell;
-  
-  constructor() {
-    this.cell = new Cell(10, 10);
-  }
+    public cell: Cell;
+
+    constructor(cell: Cell) {
+        this.cell = cell;
+    }
 }

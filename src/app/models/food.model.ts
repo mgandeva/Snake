@@ -1,34 +1,24 @@
 import { GRID_COLUMNS, GRID_ROWS } from '../constants/game-settings.constants';
 import { Cell } from './cell.model';
+import { Grid } from './grid.model';
 import { Snake } from './snake.model';
 
 export class Food {
   public cell: Cell;
+  private grid: Grid;
 
-  constructor() {
-    this.cell = new Cell(this.generateRandomRow(), this.generateRandomColumn());
+  constructor(grid: Grid) {
+    this.cell = grid.getRandomCell();
+    this.grid = grid;
   }
 
   generateRandomFood(snake: Snake) {
-    let randomCell = new Cell(
-      this.generateRandomRow(),
-      this.generateRandomColumn()
-    );
+    let randomCell = this.grid.getRandomCell();
 
     while (snake.containsCell(randomCell)) {
-      randomCell.row = this.generateRandomRow();
-      randomCell.column = this.generateRandomColumn();
+      randomCell = this.grid.getRandomCell();
     }
 
-    this.cell.row = randomCell.row;
-    this.cell.column = randomCell.column;
-  }
-
-  private generateRandomRow() {
-    return Math.floor(Math.random() * (GRID_ROWS - 1));
-  }
-
-  private generateRandomColumn() {
-    return Math.floor(Math.random() * (GRID_COLUMNS - 1));
+    this.cell = randomCell;
   }
 }

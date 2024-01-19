@@ -39,8 +39,10 @@ export class AppComponent implements OnInit {
 
   @HostListener('window:keydown', ['$event'])
   onKeypress(event: KeyboardEvent) {
-    const direction = getDirection(event.key);
-
+    const direction = getDirection(
+      event.key,
+      this.snake.getMovementDirection()
+    );
     this.snakeService.changeDirection(this.snake, direction);
   }
 

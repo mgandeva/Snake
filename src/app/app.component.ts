@@ -63,6 +63,9 @@ export class AppComponent implements OnInit {
   }
 
   isGameOver(): boolean {
+    if(this.snake.hasEatenSelf()){
+      return true;
+    }
     return false;
   }
 }

@@ -1,7 +1,6 @@
 import { Component, HostListener, OnInit } from '@angular/core';
 import { Food } from './models/food.model';
 import { Snake } from './models/snake.model';
-import { Cell } from './models/cell.model';
 import {
   GRID_COLUMNS,
   GRID_ROWS,
@@ -9,6 +8,7 @@ import {
 } from './constants/game-settings.constants';
 import { SnakeService } from './services/snake.service';
 import { getDirection } from './utilities/direction.utility';
+import { Grid } from './models/grid.model';
 
 @Component({
   selector: 'snake-app',
@@ -16,8 +16,9 @@ import { getDirection } from './utilities/direction.utility';
   styleUrl: './app.component.scss',
 })
 export class AppComponent implements OnInit {
-  private snake: Snake = new Snake();
-  private food: Food = new Food();
+  private grid: Grid = new Grid(GRID_ROWS, GRID_COLUMNS);
+  private snake: Snake = new Snake(this.grid);
+  private food: Food = new Food(this.grid);
 
   rows: number[] = [...Array(GRID_ROWS).keys()];
   columns: number[] = [...Array(GRID_COLUMNS).keys()];
@@ -28,8 +29,10 @@ export class AppComponent implements OnInit {
     const runTime = () => {
       setTimeout(() => {
         this.snake.move();
-        this.eatFood();
-        runTime();
+        if (!this.isGameOver()) {
+          this.eatFood();
+          runTime();
+        }
       }, STEP_TIME);
     };
 
@@ -43,31 +46,32 @@ export class AppComponent implements OnInit {
     this.snakeService.changeDirection(this.snake, direction);
   }
 
-  getCellClass(row: number, column: number): string {
-    const cell = new Cell(row, column);
+  getGridCellClass(row: number, column: number): string {
+    const cell = this.grid.getCell(row, column);
 
     if (this.snake.containsCell(cell)) {
       return 'snake-cell';
     }
 
-    if (this.food.cell.equals(cell)) {
+    if (this.food.cell === cell) {
       return 'food-cell';
     }
 
-    if ((cell.row + cell.column) % 2 == 0) {
+    if (cell.isLightColoured()) {
       return 'empty-cell-light';
     }
 
     return 'empty-cell-middle';
   }
 
+  isGameOver(): boolean {
+    return false;
+  }
+
   eatFood() {
     const snakeHead = this.snake.body[0];
-    if (
-      snakeHead.row === this.food.cell.row &&
-      snakeHead.column === this.food.cell.column
-    ) {
-      this.snake.grow();
+    if (snakeHead === this.food.cell) {
+      this.snake.grow(this.grid);
       this.food.generateRandomFood(this.snake);
     }
   }

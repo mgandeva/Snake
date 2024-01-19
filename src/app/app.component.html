@@ -1,9 +1,12 @@
 <div class="container">
+  <div class="headline">
+    <h1>Snake Arcade</h1>
+  </div>
   <div class="cells">
     <div *ngFor="let column of columns">
       <div *ngFor="let row of rows">
-        <div class="cell" [ngClass]="getCellClass(row, column)"></div>
-        </div>
+        <div class="cell" [ngClass]="getGridCellClass(row, column)"></div>
+      </div>
     </div>
   </div>
 </div>

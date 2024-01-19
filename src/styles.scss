@@ -1,16 +1,16 @@
 :root {
-    // green colors
-    --dark-green: #4c8c40;
-    --light-green: #aeda91;
-    --very-light-green: #bce2a3;
+  // black colors
+  --dark-black: #101014;
+  --light-black: #282a2d;
 
-    // purple colors
-    --dark-purple: #7100dd;
+  // green colors
+  --light-green: #5ac413;
+  --electric-green: #00e339;
 
-    // red colors
-    --dark-red: #ff2c41;
+  // red colors
+  --light-red: #ff074e;
 }
 
 body {
-    margin: 0;
+  background-image: url("./app/assets/background.svg");
 }

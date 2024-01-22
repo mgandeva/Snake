@@ -9,7 +9,7 @@ export class Snake {
     private movementDirection: Direction = Direction.RIGHT;
 
     constructor(grid: Grid){
-        this.body = [grid.getCell(0, 7), grid.getCell(0,6), grid.getCell(0,5), grid.getCell(0,4), grid.getCell(0,3), grid.getCell(0,2), grid.getCell(0,1), grid.getCell(0,0), grid.getCell(1,0), grid.getCell(1,1), grid.getCell(1,2), grid.getCell(1,3)];
+        this.body = [grid.getCell(0, 7), grid.getCell(0,6), grid.getCell(0,5)];
     }
 
     getFacing() : Direction {

@@ -3,8 +3,9 @@ import { Food } from './models/food.model';
 import { Snake } from './models/snake.model';
 import { GRID_COLUMNS, GRID_ROWS, MAX_FRAME_TIME, FRAME_TIME_STEP, MIN_FRAME_TIME } from './constants/game-settings.constants';
 import { SnakeService } from './services/snake.service';
-import { getDirection } from './utilities/direction.utility';
 import { Grid } from './models/grid.model';
+import { DirectionHelper } from './helpers/direction.helper';
+import { FrameTimeUpdateType } from './enums/frameTimeUpdateType.enum';
 
 @Component({
   selector: 'snake-app',
@@ -20,7 +21,10 @@ export class AppComponent implements OnInit {
   rows: number[] = [...Array(GRID_ROWS).keys()];
   columns: number[] = [...Array(GRID_COLUMNS).keys()];
 
-  constructor(private snakeService: SnakeService) {}
+  constructor(
+    private snakeService: SnakeService, 
+    private directionHelper: DirectionHelper
+  ) {}
 
   ngOnInit(): void {
     const runTime = () => {
@@ -41,10 +45,16 @@ export class AppComponent implements OnInit {
 
   @HostListener('window:keydown', ['$event'])
   onKeypress(event: KeyboardEvent) {
-    const direction = getDirection(event.key);
+    const direction = this.directionHelper.getDirection(event.key);
 
     if (direction === this.snake.movementDirection) {
-      this.decreaseFrameTime();
+      this.updateFrameTime(FrameTimeUpdateType.Decrease);
+      return;
+    }
+
+    const snakeMovementDirectionOpposite = this.directionHelper.getOppositeDirection(this.snake.movementDirection);
+    if (direction === snakeMovementDirectionOpposite) {
+      this.updateFrameTime(FrameTimeUpdateType.Increase);
       return;
     }
 
@@ -73,11 +83,12 @@ export class AppComponent implements OnInit {
     return false;
   }
 
-  private decreaseFrameTime() {
-    if (this.frameTime === MIN_FRAME_TIME) {
+  private updateFrameTime(frameTimeUpdateType: FrameTimeUpdateType) {
+    const updatedFrameTime = this.frameTime + FRAME_TIME_STEP * frameTimeUpdateType;
+    if (updatedFrameTime < MIN_FRAME_TIME || updatedFrameTime > MAX_FRAME_TIME) {
       return;
     }
 
-    this.frameTime -= FRAME_TIME_STEP;
+    this.frameTime = updatedFrameTime;
   }
 }

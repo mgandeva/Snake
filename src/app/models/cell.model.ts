@@ -1,5 +1,5 @@
-import { Direction } from "../enums/direction.enum";
-import { Grid } from "./grid.model";
+import { Direction } from '../enums/direction.enum';
+import { Grid } from './grid.model';
 
 export class Cell {
     private grid: Grid;

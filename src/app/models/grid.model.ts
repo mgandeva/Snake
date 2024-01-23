@@ -1,4 +1,4 @@
-import { Cell } from "./cell.model";
+import { Cell } from './cell.model';
 
 export class Grid {
     private rowCount: number;

@@ -1,6 +1,6 @@
-import { Injectable } from "@angular/core";
-import { Snake } from "../models/snake.model";
-import { Direction } from "../enums/direction.enum";
+import { Injectable } from '@angular/core';
+import { Snake } from '../models/snake.model';
+import { Direction } from '../enums/direction.enum';
 
 @Injectable({
     providedIn: 'root',
@@ -9,7 +9,7 @@ export class SnakeService {
     changeDirection(snake: Snake, direction: Direction) {
         const canChangeDirection = this.canChangeDirection(
             direction,
-            snake.getFacing()
+            snake.movementDirection
         );
         if (canChangeDirection) {
             snake.setMovementDirection(direction);

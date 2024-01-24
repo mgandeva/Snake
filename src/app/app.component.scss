@@ -57,3 +57,63 @@
   font-size: large;
   color: #feeb2c;
 }
+
+.screens {
+  display: flex;
+  gap: 100px;
+}
+
+.scoreboard {
+  background-color: rgb(8, 8, 8);
+  box-sizing: border-box;
+  border: solid var(--electric-purple) 3px;
+  padding: 10px 30px;
+}
+
+.high-scores {
+  display: flex;
+  justify-content: center;
+}
+
+.high-scores p {
+  font-size: 22px;
+  color: var(--light-red);
+  font-family: "Press Start 2P", cursive;
+}
+
+table {
+  width: 400px;
+  border-spacing: 0 20px;
+  border-spacing: 0 20;
+}
+
+thead {
+  display: flex;
+  width: 100%;
+}
+
+.trhead td {
+  color: var(--yellow);
+}
+
+.trhead {
+  display: flex;
+  font-family: "Press Start 2P", cursive;
+  width: 100%;
+  gap: 20px;
+  justify-content: space-between;
+}
+
+.trbody {
+  display: flex;
+  color: #0000a2;
+  font-family: "Press Start 2P";
+  margin-top: 20px;
+  justify-content: space-between;
+}
+
+tbody {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}

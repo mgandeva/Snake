@@ -6,11 +6,40 @@
   <div class="headline">
     <h1>Snake Arcade</h1>
   </div>
-  <div class="cells">
-    <div *ngFor="let column of columns">
-      <div *ngFor="let row of rows">
-        <div class="cell" [ngClass]="getGridCellClass(row, column)"></div>
+  <div class="screens">
+    <div class="cells">
+      <div *ngFor="let column of columns">
+        <div *ngFor="let row of rows">
+          <div class="cell" [ngClass]="getGridCellClass(row, column)"></div>
+        </div>
       </div>
+    </div>
+    <div class="scoreboard">
+      <div class="high-scores">
+        <p>High Scores</p>
+      </div>
+      <table>
+        <thead>
+          <tr class="trhead">
+            <td>Rank</td>
+            <td>Name</td>
+            <td>Score</td>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            class="trbody"
+            *ngFor="
+              let score of highscores.getHighscores();
+              let indexOfelement = index
+            "
+          >
+            <td>{{ indexOfelement + 1 }}</td>
+            <td>{{ score.name }}</td>
+            <td>{{ score.score }}</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   </div>
   <div class="scores">

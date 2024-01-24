@@ -25,14 +25,13 @@ export class Grid {
   }
 
   getRandomCell() {
-    return this.getCell(this.generateRandomRow(), this.generateRandomColumn());
+    return this.getCell(
+      this.generateRandom(this.rowCount - 1),
+      this.generateRandom(this.columnCount - 1)
+    );
   }
 
-  private generateRandomRow() {
-    return Math.floor(Math.random() * (this.rowCount - 1));
-  }
-
-  private generateRandomColumn() {
-    return Math.floor(Math.random() * (this.columnCount - 1));
+  private generateRandom(limit: number) {
+    return Math.floor(Math.random() * limit);
   }
 }

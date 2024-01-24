@@ -41,7 +41,8 @@ export class Snake {
 
   grow(grid: Grid) {
     const tailEnd = this.body[this.body.length - 1];
+    const newTailEnd = new Cell(grid, tailEnd.row, tailEnd.column);
 
-    return this.body.push(new Cell(grid, tailEnd.row, tailEnd.column));
+    return this.body.push(newTailEnd);
   }
 }

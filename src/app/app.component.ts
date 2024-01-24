@@ -21,7 +21,6 @@ export class AppComponent implements OnInit {
   private grid: Grid = new Grid(GRID_ROWS, GRID_COLUMNS);
   private snake: Snake = new Snake(this.grid);
   private food: Food = new Food(this.grid);
-  gameOver: boolean = false;
   score = 0;
   highscores: Highscore = new Highscore();
 

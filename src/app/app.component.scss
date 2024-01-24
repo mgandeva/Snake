@@ -1,3 +1,7 @@
+$cell-dimentions: 30px;
+$grid-rows: 15;
+$grid-columns: 20;
+
 .container {
   height: 100%;
   display: flex;
@@ -14,8 +18,33 @@
   border: solid var(--electric-purple) 3px;
 
   .cell {
-    width: 30px;
-    height: 30px;
+    width: $cell-dimentions;
+    height: $cell-dimentions;
+  }
+}
+
+.game-over {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: $grid-columns * $cell-dimentions;
+  height: $grid-rows * $cell-dimentions;
+  background-color: var(--pure-black);
+
+  box-sizing: border-box;
+  border: solid var(--electric-purple) 3px;
+
+  .headline {
+    font-size: 42px;
+    color: var(--light-red);
+    font-family: "Press Start 2P", cursive;
+  }
+
+  p {
+    font-size: 14px;
+    color: var(--yellow);
+    font-family: "Press Start 2P", cursive;
   }
 }
 

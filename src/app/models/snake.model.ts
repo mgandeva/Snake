@@ -45,4 +45,14 @@ export class Snake {
 
     return this.body.push(newTailEnd);
   }
+
+  eatsSelf(): boolean {
+    const [head, ...tail] = this.body;
+    return tail.some((tailCell) => head === tailCell);
+  }
+
+  halveLength() {
+    const remainingLength = this.body.length / 2;
+    this.body = this.body.slice(0, remainingLength);
+  }
 }

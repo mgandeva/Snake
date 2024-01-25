@@ -37,6 +37,8 @@ export class AppComponent implements OnInit {
         this.snake.move();
         if (!this.isGameOver()) {
           this.eatFood();
+          this.eatSnake();
+
           runTime();
         } else {
           this.shouldEnterHighscore = this.highscores.isHighscore(this.score);
@@ -93,6 +95,13 @@ export class AppComponent implements OnInit {
       this.snake.grow(this.grid);
       this.score += 10;
       this.food.generateRandomFood(this.snake);
+    }
+  }
+
+  eatSnake() {
+    if (this.snake.eatsSelf()) {
+      this.snake.halveLength();
+      this.score = Math.floor(this.score / 2);
     }
   }
 

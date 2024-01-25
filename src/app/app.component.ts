@@ -4,7 +4,6 @@ import { Snake } from './models/snake.model';
 import {
   GRID_COLUMNS,
   GRID_ROWS,
-  HIGHSCORE_LIST_LENGTH,
   STEP_TIME,
 } from './constants/game-settings.constants';
 import { SnakeService } from './services/snake.service';
@@ -84,7 +83,10 @@ export class AppComponent implements OnInit {
   }
 
   isGameOver(): boolean {
-    if(this.snake.hasEatenSelf()){
+    if (
+      this.snake.hasEatenSelf() ||
+      this.snake.getHead() === this.grid.getOutOfBoundsCell()
+    ) {
       return true;
     }
     return false;

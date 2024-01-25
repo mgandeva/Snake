@@ -46,6 +46,10 @@ export class Snake {
     return this.body.push(newTailEnd);
   }
 
+  getHead(): Cell {
+    return this.body[0];
+  }
+
   hasEatenSelf(): boolean {
     const [head, ...tail] = this.body;
 

@@ -59,7 +59,10 @@ export class AppComponent implements OnInit {
       });
       this.reset();
     }
-    const direction = getDirection(event.key);
+    const direction = getDirection(
+      event.key,
+      this.snake.getMovementDirection()
+    );
 
     this.snakeService.changeDirection(this.snake, direction);
   }

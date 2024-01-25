@@ -1,18 +1,22 @@
-import { Direction } from "../enums/direction.enum";
-import { Cell } from "./cell.model";
-import { Grid } from "./grid.model";
+import { Direction } from '../enums/direction.enum';
+import { Cell } from './cell.model';
+import { Grid } from './grid.model';
 
 export class Snake {
     private headIndex: number = 0;
-    private body: Cell[];
+    private _body: Cell[];
     private facing: Direction = Direction.RIGHT;
     private movementDirection: Direction = Direction.RIGHT;
 
     constructor(grid: Grid){
-        this.body = [
+        this._body = [
             grid.getCell(0, 7),
             grid.getCell(0,6),
             grid.getCell(0,5)];
+    }
+
+    get body(): Cell[] {
+        return this._body;
     }
 
     getFacing() : Direction {
@@ -28,21 +32,21 @@ export class Snake {
     }
   
     containsCell(cell: Cell): boolean {
-      return this.body.some(snakeCell => snakeCell === cell);
+      return this._body.some(snakeCell => snakeCell === cell);
     }
 
     getHead(): Cell {
-        return this.body[0];
+        return this._body[0];
     }
   
     move() {
-        this.body = this.body.map((cell: Cell, index: number) => {
+        this._body = this._body.map((cell: Cell, index: number) => {
             if (index === this.headIndex) {
                 this.facing = this.movementDirection;
                 return cell.getNeighbour(this.movementDirection);
             }
             
-            return this.body[index - 1];
+            return this._body[index - 1];
         });
     }
 }

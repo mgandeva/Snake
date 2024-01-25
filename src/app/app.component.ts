@@ -5,6 +5,8 @@ import { GRID_COLUMNS, GRID_ROWS, STEP_TIME } from './constants/game-settings.co
 import { SnakeService } from './services/snake.service';
 import { getDirection } from './utilities/direction.utility';
 import { Grid } from './models/grid.model';
+import { Wall } from './models/wall.model';
+import { WallService } from './services/wall.service';
 
 @Component({
   selector: 'snake-app',
@@ -15,11 +17,17 @@ export class AppComponent implements OnInit {
   private grid: Grid = new Grid(GRID_ROWS, GRID_COLUMNS);
   private snake: Snake = new Snake(this.grid);
   private food: Food = new Food(this.grid.getCell(10, 10));
+  private walls: Wall[];
 
   rows: number[] = [...Array(GRID_ROWS).keys()];
   columns: number[] = [...Array(GRID_COLUMNS).keys()];
 
-  constructor(private snakeService: SnakeService) {}
+  constructor(
+    private snakeService: SnakeService, 
+    private wallService: WallService
+  ) {
+    this.walls = wallService.generateWalls(this.grid, this.snake, this.food);
+  }
 
   ngOnInit(): void {
     const runTime = () => {
@@ -55,6 +63,12 @@ export class AppComponent implements OnInit {
       return 'food-cell';
     }
 
+    const isCellWall = this.walls.some(wall => 
+      wall.cells.some(wallCell => wallCell == cell));
+    if (isCellWall) {
+      return 'wall-cell';
+    }
+
     if (cell.isLightColoured()) {
       return 'empty-cell-light';
     }
@@ -66,6 +80,7 @@ export class AppComponent implements OnInit {
     if(this.snake.getHead() === this.grid.getOutOfBoundsCell()){
         return true;
     }
-    return false;
+    
+    return this.walls.some(wall => wall.hasColision(this.snake));
   }
 }

@@ -45,4 +45,11 @@ export class Snake {
 
     return this.body.push(newTailEnd);
   }
+
+  hasEatenSelf(): boolean {
+    const [head, ...tail] = this.body;
+
+    if (tail.some((tailCell) => tailCell === head)) return true;
+    return false;
+  }
 }

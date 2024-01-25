@@ -4,11 +4,13 @@ import { Snake } from './models/snake.model';
 import {
   GRID_COLUMNS,
   GRID_ROWS,
+  HIGHSCORE_LIST_LENGTH,
   STEP_TIME,
 } from './constants/game-settings.constants';
 import { SnakeService } from './services/snake.service';
 import { getDirection } from './utilities/direction.utility';
 import { Grid } from './models/grid.model';
+import { Highscore } from './models/highscore.model';
 
 @Component({
   selector: 'snake-app',
@@ -19,10 +21,13 @@ export class AppComponent implements OnInit {
   private grid: Grid = new Grid(GRID_ROWS, GRID_COLUMNS);
   private snake: Snake = new Snake(this.grid);
   private food: Food = new Food(this.grid);
+  playerName: string = '';
+  shouldEnterHighscore = false;
+  score = 0;
+  highscores: Highscore = new Highscore();
 
   rows: number[] = [...Array(GRID_ROWS).keys()];
   columns: number[] = [...Array(GRID_COLUMNS).keys()];
-  score = 0;
 
   constructor(private snakeService: SnakeService) {}
 
@@ -33,6 +38,8 @@ export class AppComponent implements OnInit {
         if (!this.isGameOver()) {
           this.eatFood();
           runTime();
+        } else {
+          this.shouldEnterHighscore = this.highscores.isHighscore(this.score);
         }
       }, STEP_TIME);
     };
@@ -42,6 +49,17 @@ export class AppComponent implements OnInit {
 
   @HostListener('window:keydown', ['$event'])
   onKeypress(event: KeyboardEvent) {
+    if (
+      this.isGameOver() &&
+      this.shouldEnterHighscore &&
+      event.key === 'Enter'
+    ) {
+      this.highscores.addNewHighscore({
+        name: this.playerName,
+        score: this.score,
+      });
+      this.reset();
+    }
     const direction = getDirection(event.key);
 
     this.snakeService.changeDirection(this.snake, direction);
@@ -76,5 +94,12 @@ export class AppComponent implements OnInit {
       this.score += 10;
       this.food.generateRandomFood(this.snake);
     }
+  }
+
+  private reset() {
+    this.snake = new Snake(this.grid);
+    this.shouldEnterHighscore = false;
+    this.playerName = '';
+    this.score = 0;
   }
 }

@@ -21,6 +21,8 @@ export class AppComponent implements OnInit {
   private grid: Grid = new Grid(GRID_ROWS, GRID_COLUMNS);
   private snake: Snake = new Snake(this.grid);
   private food: Food = new Food(this.grid);
+  playerName: string = '';
+  shouldEnterHighscore = false;
   score = 0;
   highscores: Highscore = new Highscore();
 
@@ -30,17 +32,14 @@ export class AppComponent implements OnInit {
   constructor(private snakeService: SnakeService) {}
 
   ngOnInit(): void {
-    this.highscores.addNewHighscore({ name: 'M', score: 200 });
-    this.highscores.addNewHighscore({ name: 'N', score: 200 });
-    this.highscores.addNewHighscore({ name: 'P', score: 300 });
-    this.highscores.addNewHighscore({ name: 'Q', score: 200 });
-
     const runTime = () => {
       setTimeout(() => {
         this.snake.move();
         if (!this.isGameOver()) {
           this.eatFood();
           runTime();
+        } else {
+          this.shouldEnterHighscore = this.highscores.isHighscore(this.score);
         }
       }, STEP_TIME);
     };
@@ -50,6 +49,17 @@ export class AppComponent implements OnInit {
 
   @HostListener('window:keydown', ['$event'])
   onKeypress(event: KeyboardEvent) {
+    if (
+      this.isGameOver() &&
+      this.shouldEnterHighscore &&
+      event.key === 'Enter'
+    ) {
+      this.highscores.addNewHighscore({
+        name: this.playerName,
+        score: this.score,
+      });
+      this.reset();
+    }
     const direction = getDirection(event.key);
 
     this.snakeService.changeDirection(this.snake, direction);
@@ -84,5 +94,12 @@ export class AppComponent implements OnInit {
       this.score += 10;
       this.food.generateRandomFood(this.snake);
     }
+  }
+
+  private reset() {
+    this.snake = new Snake(this.grid);
+    this.shouldEnterHighscore = false;
+    this.playerName = '';
+    this.score = 0;
   }
 }

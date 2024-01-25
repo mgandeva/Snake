@@ -84,7 +84,21 @@ $grid-columns: 20;
   font-family: "Press Start 2P", cursive;
   gap: 10px;
   font-size: large;
-  color: #feeb2c;
+  color: var(--yellow);
+}
+
+.input {
+  display: flex;
+  flex-direction: row;
+
+  input {
+    background-color: var(--pure-black);
+    height: 30px;
+    margin-left: 5px;
+    margin-top: 5px;
+    color: var(--yellow);
+    font-family: "Press Start 2P", cursive;
+  }
 }
 
 .screens {
@@ -93,56 +107,48 @@ $grid-columns: 20;
 }
 
 .scoreboard {
-  background-color: rgb(8, 8, 8);
+  background-color: var(--pure-black);
   box-sizing: border-box;
   border: solid var(--electric-purple) 3px;
   padding: 10px 30px;
+  height: $grid-rows * $cell-dimentions;
+  overflow-x: hidden;
+  overflow-y: scroll;
 }
 
-.high-scores {
-  display: flex;
-  justify-content: center;
+::-webkit-scrollbar {
+  display: none;
 }
 
-.high-scores p {
+.high-scores-title p {
   font-size: 22px;
   color: var(--light-red);
   font-family: "Press Start 2P", cursive;
+  text-align: center;
 }
 
-table {
+.highscore-table {
   width: 400px;
   border-spacing: 0 20px;
   border-spacing: 0 20;
 }
 
-thead {
+.headings {
   display: flex;
-  width: 100%;
-}
 
-.trhead td {
-  color: var(--yellow);
-}
-
-.trhead {
-  display: flex;
-  font-family: "Press Start 2P", cursive;
   width: 100%;
   gap: 20px;
   justify-content: space-between;
+
+  p {
+    font-family: "Press Start 2P", cursive;
+    color: var(--yellow);
+  }
 }
 
-.trbody {
+.results {
   display: flex;
-  color: #0000a2;
+  color: var(--mild-blue);
   font-family: "Press Start 2P";
-  margin-top: 20px;
   justify-content: space-between;
-}
-
-tbody {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
 }

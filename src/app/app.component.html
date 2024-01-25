@@ -10,11 +10,9 @@
     <div *ngIf="isGameOver(); else elseBlock">
       <div class="game-over">
         <p class="headline">Game over!</p>
-        <p>Press Space to start again!</p>
-      </div>
-      <div *ngFor="let column of columns">
-        <div *ngFor="let row of rows">
-          <div class="cell" [ngClass]="getGridCellClass(row, column)"></div>
+        <div class="input" *ngIf="shouldEnterHighscore">
+          <p>Enter name:</p>
+          <input type="text" id="playerName" [(ngModel)]="playerName" />
         </div>
       </div>
     </div>
@@ -28,31 +26,30 @@
       </div>
     </ng-template>
     <div class="scoreboard">
-      <div class="high-scores">
+      <div class="high-scores-title">
         <p>High Scores</p>
       </div>
-      <table>
-        <thead>
-          <tr class="trhead">
-            <td>Rank</td>
-            <td>Name</td>
-            <td>Score</td>
-          </tr>
-        </thead>
-        <tbody>
-          <tr
-            class="trbody"
+      <div class="highscore-table">
+        <div class="headings">
+          <p>Rank</p>
+          <p>Name</p>
+          <p>Score</p>
+        </div>
+
+        <div>
+          <div
+            class="results"
             *ngFor="
               let score of highscores.getHighscores();
               let indexOfelement = index
             "
           >
-            <td>{{ indexOfelement + 1 }}</td>
-            <td>{{ score.name }}</td>
-            <td>{{ score.score }}</td>
-          </tr>
-        </tbody>
-      </table>
+            <p>{{ indexOfelement + 1 }}</p>
+            <p>{{ score.name }}</p>
+            <p>{{ score.score }}</p>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
   <div class="scores">

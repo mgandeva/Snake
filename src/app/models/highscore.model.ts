@@ -12,8 +12,11 @@ export class Highscore {
     this.highscores = new Array<HighscoreProps>();
   }
 
-  isHighscore(highscore: number) {
-    return highscore > this.highscores[HIGHSCORE_LIST_LENGTH - 1].score;
+  isHighscore(currentScore: number) {
+    return (
+      this.highscores.length < HIGHSCORE_LIST_LENGTH ||
+      currentScore > this.highscores[HIGHSCORE_LIST_LENGTH - 1].score
+    );
   }
 
   addNewHighscore(highscore: HighscoreProps) {

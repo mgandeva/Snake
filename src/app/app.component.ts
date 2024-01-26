@@ -13,6 +13,8 @@ import { Grid } from './models/grid.model';
 import { Highscore } from './models/highscore.model';
 import { DirectionHelper } from './helpers/direction.helper';
 import { FrameTimeUpdateType } from './enums/frameTimeUpdateType.enum';
+import { Wall } from './models/wall.model';
+import { WallService } from './services/wall.service';
 
 @Component({
   selector: 'snake-app',
@@ -24,6 +26,7 @@ export class AppComponent implements OnInit {
   private snake: Snake = new Snake(this.grid);
   private food: Food = new Food(this.grid);
   private frameTime = MAX_FRAME_TIME;
+  private walls: Wall[];
   playerName: string = '';
   shouldEnterHighscore = false;
   score = 0;
@@ -33,9 +36,12 @@ export class AppComponent implements OnInit {
   columns: number[] = [...Array(GRID_COLUMNS).keys()];
 
   constructor(
+    private directionHelper: DirectionHelper,
     private snakeService: SnakeService,
-    private directionHelper: DirectionHelper
-  ) {}
+    private wallService: WallService
+  ) {
+    this.walls = wallService.generateWalls(this.grid, this.snake, this.food);
+  }
 
   ngOnInit(): void {
     const runTime = () => {
@@ -98,6 +104,13 @@ export class AppComponent implements OnInit {
       return 'food-cell';
     }
 
+    const isCellWall = this.walls.some((wall) =>
+      wall.cells.some((wallCell) => wallCell == cell)
+    );
+    if (isCellWall) {
+      return 'wall-cell';
+    }
+
     if (cell.isLightColoured()) {
       return 'empty-cell-light';
     }
@@ -112,7 +125,8 @@ export class AppComponent implements OnInit {
     ) {
       return true;
     }
-    return false;
+
+    return this.walls.some((wall) => wall.hasColision(this.snake));
   }
 
   eatFood() {

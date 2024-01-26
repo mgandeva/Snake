@@ -57,6 +57,11 @@ $grid-columns: 20;
   background-image: url("./assets/food.png");
 }
 
+.wall-cell {
+  background-color: var(--light-red);
+  border-radius: 25%;
+}
+
 .empty-cell-light {
   background-color: var(--light-black);
 }

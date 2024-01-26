@@ -1,7 +1,11 @@
 import { Component, HostListener, OnInit } from '@angular/core';
 import { Food } from './models/food.model';
 import { Snake } from './models/snake.model';
-import { GRID_COLUMNS, GRID_ROWS, STEP_TIME } from './constants/game-settings.constants';
+import {
+  GRID_COLUMNS,
+  GRID_ROWS,
+  STEP_TIME,
+} from './constants/game-settings.constants';
 import { SnakeService } from './services/snake.service';
 import { getDirection } from './utilities/direction.utility';
 import { Grid } from './models/grid.model';
@@ -16,11 +20,12 @@ import { WallService } from './services/wall.service';
 export class AppComponent implements OnInit {
   private grid: Grid = new Grid(GRID_ROWS, GRID_COLUMNS);
   private snake: Snake = new Snake(this.grid);
-  private food: Food = new Food(this.grid.getCell(10, 10));
-  private walls: Wall[];
+    private food: Food = new Food(this.grid);
+    private walls: Wall[];
 
   rows: number[] = [...Array(GRID_ROWS).keys()];
   columns: number[] = [...Array(GRID_COLUMNS).keys()];
+  score = 0;
 
   constructor(
     private snakeService: SnakeService, 
@@ -31,15 +36,13 @@ export class AppComponent implements OnInit {
 
   ngOnInit(): void {
     const runTime = () => {
-      setTimeout(
-        () => {
-          this.snake.move();
-          if(!this.isGameOver()){
-            runTime();
-          }
-        }, 
-        STEP_TIME
-      );
+      setTimeout(() => {
+        this.snake.move();
+        if (!this.isGameOver()) {
+          this.eatFood();
+          runTime();
+        }
+      }, STEP_TIME);
     };
 
     runTime();
@@ -80,7 +83,20 @@ export class AppComponent implements OnInit {
     if(this.snake.getHead() === this.grid.getOutOfBoundsCell()){
         return true;
     }
+
+      if (this.snake.hasEatenSelf()) {
+      return true;
+    }
     
     return this.walls.some(wall => wall.hasColision(this.snake));
+  }
+
+  eatFood() {
+    const snakeHead = this.snake.body[0];
+    if (snakeHead === this.food.cell) {
+      this.snake.grow(this.grid);
+      this.score += 10;
+      this.food.generateRandomFood(this.snake);
+    }
   }
 }

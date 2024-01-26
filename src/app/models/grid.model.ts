@@ -49,4 +49,15 @@ export class Grid {
     getOutOfBoundsCell(): Cell {
         return this.outOfBoundsCell;
     }
+
+    getRandomCell() {
+        return this.getCell(
+            this.generateRandom(this.rowCount - 1),
+            this.generateRandom(this.columnCount - 1)
+        );
+    }
+
+    private generateRandom(limit: number) {
+        return Math.floor(Math.random() * limit);
+    }
 }

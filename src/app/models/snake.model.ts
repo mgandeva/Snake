@@ -23,9 +23,9 @@ export class Snake {
         return this.facing;
     }
 
-    getMovementDirection() : Direction {
-        return this.movementDirection;
-    }
+  getMovementDirection(): Direction {
+    return this.movementDirection;
+  }
 
     setMovementDirection(direction: Direction): void {
         this.movementDirection = direction;
@@ -48,5 +48,20 @@ export class Snake {
             
             return this._body[index - 1];
         });
+    }
+
+    hasEatenSelf(): boolean {
+        const [head, ...tail] = this.body;
+
+        if(tail.some(tailCell => tailCell === head))
+            return true;
+        return false;
+    }
+
+    grow(grid: Grid) {
+        const tailEnd = this.body[this.body.length - 1];
+        const newTailEnd = new Cell(grid, tailEnd.row, tailEnd.column);
+
+        return this.body.push(newTailEnd);
     }
 }

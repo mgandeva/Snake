@@ -51,6 +51,7 @@ export class AppComponent implements OnInit {
 
           if (!this.isGameOver()) {
             this.eatFood();
+            this.eatSnake();
             runTime();
           } else {
               this.shouldEnterHighscore = this.highscores.isHighscore(this.score);
@@ -121,10 +122,6 @@ export class AppComponent implements OnInit {
     if(this.snake.getHead() === this.grid.getOutOfBoundsCell()){
         return true;
     }
-
-      if (this.snake.hasEatenSelf()) {
-      return true;
-    }
     
     return this.walls.some(wall => wall.hasColision(this.snake));
   }
@@ -145,6 +142,13 @@ export class AppComponent implements OnInit {
     }
 
     this.frameTime = updatedFrameTime;
+  }
+
+  eatSnake() {
+    if (this.snake.eatsSelf()) {
+      this.snake.halveLength();
+      this.score = Math.floor(this.score / 2);
+    }
   }
 
   private reset() {

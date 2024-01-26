@@ -45,7 +45,7 @@ export class Snake {
     }
 
     hasEatenSelf(): boolean {
-        const [head, ...tail] = this.body;
+        const [head, ...tail] = this._body;
 
         if(tail.some(tailCell => tailCell === head))
             return true;
@@ -53,9 +53,19 @@ export class Snake {
     }
 
     grow(grid: Grid) {
-        const tailEnd = this.body[this.body.length - 1];
+        const tailEnd = this._body[this._body.length - 1];
         const newTailEnd = new Cell(grid, tailEnd.row, tailEnd.column);
 
-        return this.body.push(newTailEnd);
-    }
+    return this._body.push(newTailEnd);
+  }
+
+  eatsSelf(): boolean {
+    const [head, ...tail] = this._body;
+    return tail.some((tailCell) => head === tailCell);
+  }
+
+  halveLength() {
+    const remainingLength = this._body.length / 2;
+    this._body = this._body.slice(0, remainingLength);
+  }
 }

@@ -1,9 +1,6 @@
 import { Direction } from '../enums/direction.enum';
 
-export function getDirection(
-  key: string,
-  currentDirection: Direction
-): Direction {
+export function getDirection(key: string): Direction | null {
   switch (key) {
     case 'ArrowLeft':
       return Direction.LEFT;
@@ -14,6 +11,6 @@ export function getDirection(
     case 'ArrowRight':
       return Direction.RIGHT;
     default:
-      return currentDirection;
+      return null;
   }
 }

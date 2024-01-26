@@ -39,11 +39,8 @@ export class AppComponent implements OnInit {
 
   @HostListener('window:keydown', ['$event'])
   onKeypress(event: KeyboardEvent) {
-    const direction = getDirection(
-      event.key,
-      this.snake.getMovementDirection()
-    );
-    this.snakeService.changeDirection(this.snake, direction);
+    const direction = getDirection(event.key);
+    direction && this.snakeService.changeDirection(this.snake, direction);
   }
 
   getGridCellClass(row: number, column: number): string {

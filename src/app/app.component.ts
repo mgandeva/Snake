@@ -27,6 +27,9 @@ export class AppComponent implements OnInit {
   private food: Food = new Food(this.grid);
   private frameTime = MAX_FRAME_TIME;
   private walls: Wall[];
+
+  private isPaused = true;
+
   playerName: string = '';
   shouldEnterHighscore = false;
   score = 0;
@@ -44,20 +47,22 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    const runTime = () => {
-      setTimeout(() => {
+    this.runTime();
+  }
+
+  private runTime() {
+    setTimeout(() => {
+      if (!this.isPaused) {
         this.snake.move();
+      }
 
-        if (!this.isGameOver()) {
-          this.eatFood();
-          runTime();
-        } else {
-          this.shouldEnterHighscore = this.highscores.isHighscore(this.score);
-        }
-      }, this.frameTime);
-    };
-
-    runTime();
+      if (!this.isGameOver()) {
+        this.eatFood();
+        this.runTime();
+      } else {
+        this.shouldEnterHighscore = this.highscores.isHighscore(this.score);
+      }
+    }, this.frameTime);
   }
 
   @HostListener('window:keydown', ['$event'])
@@ -71,8 +76,26 @@ export class AppComponent implements OnInit {
         name: this.playerName,
         score: this.score,
       });
-      this.reset();
+      this.shouldEnterHighscore = false;
     }
+
+    if (this.isGameOver() && event.key === ' ') {
+      this.reset();
+      return;
+    }
+
+    if (event.key === 'P' || event.key === 'p') {
+      this.isPaused = !this.isPaused;
+      return;
+    }
+
+    if (
+      this.isPaused &&
+      this.directionHelper.getDirection(event.key, this.snake.movementDirection)
+    ) {
+      this.isPaused = false;
+    }
+
     const direction = this.directionHelper.getDirection(
       event.key,
       this.snake.movementDirection
@@ -119,14 +142,11 @@ export class AppComponent implements OnInit {
   }
 
   isGameOver(): boolean {
-    if (
+    return (
       this.snake.hasEatenSelf() ||
-      this.snake.getHead() === this.grid.getOutOfBoundsCell()
-    ) {
-      return true;
-    }
-
-    return this.walls.some((wall) => wall.hasColision(this.snake));
+      this.snake.getHead() === this.grid.getOutOfBoundsCell() ||
+      this.walls.some((wall) => wall.hasColision(this.snake))
+    );
   }
 
   eatFood() {
@@ -156,5 +176,8 @@ export class AppComponent implements OnInit {
     this.shouldEnterHighscore = false;
     this.playerName = '';
     this.score = 0;
+    this.frameTime = FRAME_TIME_STEP;
+    this.isPaused = true;
+    this.runTime();
   }
 }

@@ -20,21 +20,11 @@ export class Grid {
     }
 
     getCell(row: number, col: number): Cell {
-        return this.getCellBounded(row, col);
-    }
-
-    getCellUnbounded(row: number, col: number): Cell {
-        const normalizedRow = (row + this.rowCount) % this.rowCount;
-        const normalizedCol = (col + this.columnCount) % this.columnCount;
-
-        return this.cells[normalizedRow][normalizedCol];
-    }
-
-    getCellBounded(row: number, col: number): Cell {
         if(row < 0 || this.rowCount <= row ||
            col < 0 || this.columnCount <= col){
            return this.outOfBoundsCell;
         }
+
         return this.cells[row][col];
     }
 

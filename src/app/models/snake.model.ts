@@ -9,7 +9,10 @@ export class Snake {
     private movementDirection: Direction = Direction.RIGHT;
 
     constructor(grid: Grid){
-        this.body = [grid.getCell(0, 7), grid.getCell(0,6), grid.getCell(0,5)];
+        this.body = [
+            grid.getCell(0, 7),
+            grid.getCell(0,6),
+            grid.getCell(0,5)];
     }
 
     getFacing() : Direction {
@@ -26,6 +29,10 @@ export class Snake {
   
     containsCell(cell: Cell): boolean {
       return this.body.some(snakeCell => snakeCell === cell);
+    }
+
+    getHead(): Cell {
+        return this.body[0];
     }
   
     move() {

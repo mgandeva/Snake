@@ -49,8 +49,6 @@ export class Snake {
     hasEatenSelf(): boolean {
         const [head, ...tail] = this.body;
 
-        if(tail.some(tailCell => tailCell === head))
-            return true;
-        return false;
+        return tail.some(tailCell => tailCell === head);
     }
 }

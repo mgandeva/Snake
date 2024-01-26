@@ -4,11 +4,18 @@ import { Grid } from './grid.model';
 
 export class Snake {
     private headIndex: number = 0;
-    private body: Cell[];
+    private _body: Cell[];
     private _movementDirection: Direction = Direction.RIGHT;
 
     constructor(grid: Grid){
-        this.body = [grid.getCell(0, 7), grid.getCell(0,6), grid.getCell(0,5)];
+        this._body = [
+            grid.getCell(0, 7),
+            grid.getCell(0,6),
+            grid.getCell(0,5)];
+    }
+
+    get body(): Cell[] {
+        return this._body;
     }
 
     get movementDirection() : Direction {
@@ -20,16 +27,35 @@ export class Snake {
     }
   
     containsCell(cell: Cell): boolean {
-      return this.body.some(snakeCell => snakeCell === cell);
+      return this._body.some(snakeCell => snakeCell === cell);
+    }
+
+    getHead(): Cell {
+        return this._body[0];
     }
   
     move() {
-        this.body = this.body.map((cell: Cell, index: number) => {
+        this._body = this._body.map((cell: Cell, index: number) => {
             if (index === this.headIndex) {
                 return cell.getNeighbour(this.movementDirection);
             }
             
-            return this.body[index - 1];
+            return this._body[index - 1];
         });
+    }
+
+    hasEatenSelf(): boolean {
+        const [head, ...tail] = this.body;
+
+        if(tail.some(tailCell => tailCell === head))
+            return true;
+        return false;
+    }
+
+    grow(grid: Grid) {
+        const tailEnd = this.body[this.body.length - 1];
+        const newTailEnd = new Cell(grid, tailEnd.row, tailEnd.column);
+
+        return this.body.push(newTailEnd);
     }
 }

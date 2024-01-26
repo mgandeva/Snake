@@ -28,6 +28,11 @@
   background-image: url("./assets/food.png");
 }
 
+.wall-cell {
+  background-color: var(--electric-purple);
+  border-radius: 25%;
+}
+
 .empty-cell-light {
   background-color: var(--light-black);
 }
@@ -43,4 +48,17 @@
   font-size: large;
   color: var(--electric-green);
   font-family: "Bungee Shade", cursive;
+}
+
+.scores {
+  margin-bottom: 15px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-start;
+  font-family: "Press Start 2P", cursive;
+  gap: 10px;
+  font-size: large;
+  color: #feeb2c;
 }

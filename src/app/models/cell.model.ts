@@ -1,31 +1,26 @@
 import { Direction } from '../enums/direction.enum';
+import { CellPosition } from './cell-position.model';
 import { Grid } from './grid.model';
 
-export class Cell {
-  private grid: Grid;
-  row: number;
-  column: number;
+export class Cell extends CellPosition {
+    private _grid: Grid;
 
-  constructor(grid: Grid, row: number, column: number) {
-    this.grid = grid;
-    this.row = row;
-    this.column = column;
-  }
+    constructor(grid: Grid, row: number, column: number) {
+        super(row, column);
 
-  getNeighbour(direction: Direction): Cell {
-    switch (direction) {
-      case Direction.RIGHT:
-        return this.grid.getCell(this.row, this.column + 1);
-      case Direction.LEFT:
-        return this.grid.getCell(this.row, this.column - 1);
-      case Direction.UP:
-        return this.grid.getCell(this.row - 1, this.column);
-      case Direction.DOWN:
-        return this.grid.getCell(this.row + 1, this.column);
+        this._grid = grid;
     }
-  }
 
-  isLightColoured(): boolean {
-    return (this.row + this.column) % 2 === 0;
-  }
+    getNeighbour(direction: Direction): Cell {
+        switch(direction) {
+            case Direction.RIGHT:
+                return this._grid.getCell(this._row, this._column + 1);
+            case Direction.LEFT:
+                return this._grid.getCell(this._row, this._column - 1);
+            case Direction.UP:
+                return this._grid.getCell(this._row - 1, this._column);
+            case Direction.DOWN:
+                return this._grid.getCell(this._row + 1, this._column);
+        }
+    }
 }

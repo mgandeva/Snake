@@ -6,7 +6,8 @@ import {
   GRID_COLUMNS,
   GRID_ROWS,
   MAX_FRAME_TIME,
-  MIN_FRAME_TIME
+  MIN_FRAME_TIME,
+  SPEED_BOOST_DURATION
 } from './constants/game-settings.constants';
 import { SnakeService } from './services/snake.service';
 import { Grid } from './models/grid.model';
@@ -132,19 +133,32 @@ export class AppComponent implements OnInit {
       this.snake.grow(this.grid);
       this.score += 10;
       this.food.generateRandomFood(this.snake);
+      this.boostSpeed();
     }
   }
 
-  private updateFrameTime(frameTimeUpdateType: FrameTimeUpdateType) {
+  private boostSpeed() {
+    const isFrameTimeUpdated = this.updateFrameTime(FrameTimeUpdateType.Decrease);
+    if (isFrameTimeUpdated) {
+      setTimeout(
+        () => this.updateFrameTime(FrameTimeUpdateType.Increase),
+        SPEED_BOOST_DURATION
+      )
+    }
+  }
+
+  private updateFrameTime(frameTimeUpdateType: FrameTimeUpdateType): boolean {
     const updatedFrameTime = this.frameTime + FRAME_TIME_STEP * frameTimeUpdateType;
     if (updatedFrameTime < MIN_FRAME_TIME || updatedFrameTime > MAX_FRAME_TIME) {
-      return;
+      return false;
     }
 
     this.frameTime = updatedFrameTime;
+
+    return true;
   }
 
-  eatSnake() {
+  private eatSnake() {
     if (this.snake.eatsSelf()) {
       this.snake.halveLength();
       this.score = Math.floor(this.score / 2);

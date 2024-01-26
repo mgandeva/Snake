@@ -9,3 +9,5 @@ export const MAX_FRAME_TIME = 250;
 export const FRAME_TIME_STEP = 100;
 
 export const HIGHSCORE_LIST_LENGTH = 10;
+
+export const SPEED_BOOST_DURATION = 5000;

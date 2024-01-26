@@ -52,8 +52,8 @@ export class Grid {
 
     getRandomCell() {
         return this.getCell(
-            this.generateRandom(this.rowCount - 1),
-            this.generateRandom(this.columnCount - 1)
+            this.generateRandom(this._rowsCount - 1),
+            this.generateRandom(this._columnsCount - 1)
         );
     }
 

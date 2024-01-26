@@ -3,56 +3,69 @@ import { Cell } from './cell.model';
 import { Grid } from './grid.model';
 
 export class Snake {
-  private headIndex: number = 0;
-  body: Cell[];
-  private facing: Direction = Direction.RIGHT;
-  private movementDirection: Direction = Direction.RIGHT;
+    private headIndex: number = 0;
+    private _body: Cell[];
+    private _movementDirection: Direction = Direction.RIGHT;
 
-  constructor(grid: Grid) {
-    this.body = [grid.getCell(0, 7), grid.getCell(0, 6), grid.getCell(0, 5)];
-  }
+    constructor(grid: Grid){
+        this._body = [
+            grid.getCell(0, 7),
+            grid.getCell(0,6),
+            grid.getCell(0,5)];
+    }
 
-  getFacing(): Direction {
-    return this.facing;
-  }
+    get body(): Cell[] {
+        return this._body;
+    }
 
-  getMovementDirection(): Direction {
-    return this.movementDirection;
-  }
+    get movementDirection() : Direction {
+        return this._movementDirection;
+    }
 
-  setMovementDirection(direction: Direction): void {
-    this.movementDirection = direction;
-  }
+    setMovementDirection(direction: Direction): void {
+        this._movementDirection = direction;
+    }
+  
+    containsCell(cell: Cell): boolean {
+      return this._body.some(snakeCell => snakeCell === cell);
+    }
 
-  containsCell(cell: Cell): boolean {
-    return this.body.some((snakeCell) => snakeCell === cell);
-  }
+    getHead(): Cell {
+        return this._body[0];
+    }
+  
+    move() {
+        this._body = this._body.map((cell: Cell, index: number) => {
+            if (index === this.headIndex) {
+                return cell.getNeighbour(this.movementDirection);
+            }
+            
+            return this._body[index - 1];
+        });
+    }
 
-  move() {
-    this.body = this.body.map((cell: Cell, index: number) => {
-      if (index === this.headIndex) {
-        this.facing = this.movementDirection;
-        return cell.getNeighbour(this.movementDirection);
-      }
+    hasEatenSelf(): boolean {
+        const [head, ...tail] = this._body;
 
-      return this.body[index - 1];
-    });
-  }
+        if(tail.some(tailCell => tailCell === head))
+            return true;
+        return false;
+    }
 
-  grow(grid: Grid) {
-    const tailEnd = this.body[this.body.length - 1];
-    const newTailEnd = new Cell(grid, tailEnd.row, tailEnd.column);
+    grow(grid: Grid) {
+        const tailEnd = this._body[this._body.length - 1];
+        const newTailEnd = new Cell(grid, tailEnd.row, tailEnd.column);
 
-    return this.body.push(newTailEnd);
+    return this._body.push(newTailEnd);
   }
 
   eatsSelf(): boolean {
-    const [head, ...tail] = this.body;
+    const [head, ...tail] = this._body;
     return tail.some((tailCell) => head === tailCell);
   }
 
   halveLength() {
-    const remainingLength = this.body.length / 2;
-    this.body = this.body.slice(0, remainingLength);
+    const remainingLength = this._body.length / 2;
+    this._body = this._body.slice(0, remainingLength);
   }
 }

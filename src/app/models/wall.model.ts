@@ -20,6 +20,6 @@ export class Wall {
     }
 
     hasColision(snake: Snake): boolean {
-        return this._cells.some(cell => cell == snake.getHead());
+        return this._cells.some(cell => cell === snake.getHead());
     }
 }

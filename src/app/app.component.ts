@@ -80,7 +80,7 @@ export class AppComponent implements OnInit {
 
   private isCellWall(cell: Cell): boolean {
     return this.walls.some(wall => 
-      wall.cells.some(wallCell => wallCell == cell));
+      wall.cells.some(wallCell => wallCell === cell));
   }
 
   private getWallClasses(cell: Cell): string {

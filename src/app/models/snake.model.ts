@@ -22,10 +22,10 @@ export class Snake {
     getFacing() : Direction {
         return this.facing;
     }
-
-  getMovementDirection(): Direction {
-    return this.movementDirection;
-  }
+  
+    getMovementDirection(): Direction {
+        return this.movementDirection;
+    }
 
     setMovementDirection(direction: Direction): void {
         this.movementDirection = direction;

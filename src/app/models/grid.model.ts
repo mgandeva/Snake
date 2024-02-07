@@ -1,3 +1,4 @@
+import { RandomHelper } from '../helpers/random.helper';
 import { Cell } from './cell.model';
 
 export class Grid {
@@ -6,7 +7,10 @@ export class Grid {
     private cells: Cell[][];
     private outOfBoundsCell: Cell;
 
-    constructor(rows: number, columns: number) {
+    constructor(
+        rows: number, 
+        columns: number, 
+        private randomHelper: RandomHelper) {
         this._rowsCount = rows;
         this._columnsCount = columns;
         this.cells = new Array(this._rowsCount);
@@ -52,12 +56,8 @@ export class Grid {
 
     getRandomCell() {
         return this.getCell(
-            this.generateRandom(this._rowsCount - 1),
-            this.generateRandom(this._columnsCount - 1)
+            this.randomHelper.randomNumber(0, this._rowsCount - 1),
+            this.randomHelper.randomNumber(0, this._columnsCount - 1)
         );
-    }
-
-    private generateRandom(limit: number) {
-        return Math.floor(Math.random() * limit);
     }
 }

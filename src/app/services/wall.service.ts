@@ -14,10 +14,10 @@ import { Food } from '../models/food.model';
 export class WallService {
     constructor(private randomHelper: RandomHelper) {}
 
-    generateWalls(grid: Grid, snake: Snake, food: Food): Wall[] {
+    generateWalls(grid: Grid, snake: Snake): Wall[] {
         const wallsCount = this.randomHelper.randomNumber(MIN_WALLS_COUNT, MAX_WALLS_COUNT);
 
-        let occupiedCells = snake.body.concat(food.cell);
+        let occupiedCells = snake.body;
 
         const walls: Wall[] = [];
         for(let i = 0; i < wallsCount; i++) {

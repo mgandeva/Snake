@@ -13,6 +13,7 @@ import { Wall } from './models/wall.model';
 import { WallService } from './services/wall.service';
 import { Cell } from './models/cell.model';
 import { Direction } from './enums/direction.enum';
+import { RandomHelper } from './helpers/random.helper';
 
 @Component({
   selector: 'snake-app',
@@ -20,10 +21,10 @@ import { Direction } from './enums/direction.enum';
   styleUrl: './app.component.scss',
 })
 export class AppComponent implements OnInit {
-  private grid: Grid = new Grid(GRID_ROWS, GRID_COLUMNS);
+  private grid: Grid = new Grid(GRID_ROWS, GRID_COLUMNS, this.randomHelper);
   private snake: Snake = new Snake(this.grid);
-    private food: Food = new Food(this.grid);
-    private walls: Wall[];
+  private food: Food;
+  private walls: Wall[];
 
   rows: number[] = [...Array(GRID_ROWS).keys()];
   columns: number[] = [...Array(GRID_COLUMNS).keys()];
@@ -31,9 +32,11 @@ export class AppComponent implements OnInit {
 
   constructor(
     private snakeService: SnakeService, 
-    private wallService: WallService
+    private wallService: WallService,
+    private randomHelper: RandomHelper
   ) {
-    this.walls = wallService.generateWalls(this.grid, this.snake, this.food);
+    this.walls = wallService.generateWalls(this.grid, this.snake);
+    this.food = new Food(this.grid, this.snake, this.walls);
   }
 
   ngOnInit(): void {
@@ -126,7 +129,7 @@ export class AppComponent implements OnInit {
     if (snakeHead === this.food.cell) {
       this.snake.grow(this.grid);
       this.score += 10;
-      this.food.generateRandomFood(this.snake);
+      this.food.generateRandomFood(this.snake, this.walls);
     }
   }
 }

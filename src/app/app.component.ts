@@ -11,6 +11,8 @@ import { getDirection } from './utilities/direction.utility';
 import { Grid } from './models/grid.model';
 import { Wall } from './models/wall.model';
 import { WallService } from './services/wall.service';
+import { Cell } from './models/cell.model';
+import { Direction } from './enums/direction.enum';
 
 @Component({
   selector: 'snake-app',
@@ -55,31 +57,59 @@ export class AppComponent implements OnInit {
     this.snakeService.changeDirection(this.snake, direction);
   }
 
-  getGridCellClass(row: number, column: number): string {
+  getGridCellClasses(row: number, column: number): string {
     const cell = this.grid.getCell(row, column);
-
-    if (this.snake.containsCell(cell)) {
-      return 'snake-cell';
-    }
 
     if (this.food.cell === cell) {
       return 'food-cell';
     }
 
-    const isCellWall = this.walls.some(wall => 
-      wall.cells.some(wallCell => wallCell == cell));
-    if (isCellWall) {
-      return 'wall-cell';
+    let classes = cell.isLightColoured() 
+      ? 'empty-cell-light' 
+      : 'empty-cell-middle';
+
+    if (this.isCellWall(cell)) {
+      classes += this.getWallClasses(cell);
+    }
+    else if (this.snake.containsCell(cell)) {
+      return 'snake-cell';
     }
 
-    if (cell.isLightColoured()) {
-      return 'empty-cell-light';
-    }
-
-    return 'empty-cell-middle';
+    return classes;
   }
 
-  isGameOver(): boolean {
+  private isCellWall(cell: Cell): boolean {
+    return this.walls.some(wall => 
+      wall.cells.some(wallCell => wallCell == cell));
+  }
+
+  private getWallClasses(cell: Cell): string {
+    let classes = '';
+
+    const upperCell = cell.getNeighbour(Direction.UP);
+    if (cell.row > 0 && !this.isCellWall(upperCell)) {
+      classes += ' border-top';
+    }
+    
+    const lowerCell = cell.getNeighbour(Direction.DOWN);
+    if (cell.row < GRID_ROWS - 1 && !this.isCellWall(lowerCell)) {
+      classes += ' border-bottom';
+    }
+    
+    const leftCell = cell.getNeighbour(Direction.LEFT);
+    if (cell.column > 0 && !this.isCellWall(leftCell)) {
+      classes += ' border-left';
+    }
+    
+    const rightCell = cell.getNeighbour(Direction.RIGHT);
+    if (cell.column < GRID_COLUMNS - 1 && !this.isCellWall(rightCell)) {
+      classes += ' border-right';
+    }
+
+    return classes;
+  }
+
+  private isGameOver(): boolean {
     if(this.snake.getHead() === this.grid.getOutOfBoundsCell()){
         return true;
     }
@@ -91,7 +121,7 @@ export class AppComponent implements OnInit {
     return this.walls.some(wall => wall.hasColision(this.snake));
   }
 
-  eatFood() {
+  private eatFood() {
     const snakeHead = this.snake.body[0];
     if (snakeHead === this.food.cell) {
       this.snake.grow(this.grid);

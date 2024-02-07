@@ -1,15 +1,18 @@
+import { INITIAL_SNAKE_POSITIONS } from "../constants/game-settings.constants";
 import { Direction } from "../enums/direction.enum";
 import { Cell } from "./cell.model";
 import { Grid } from "./grid.model";
 
 export class Snake {
     private headIndex: number = 0;
-    private body: Cell[];
+    private body: Cell[] = [];
     private facing: Direction = Direction.RIGHT;
     private movementDirection: Direction = Direction.RIGHT;
 
     constructor(grid: Grid){
-        this.body = [grid.getCell(0, 7), grid.getCell(0,6), grid.getCell(0,5)];
+        INITIAL_SNAKE_POSITIONS.forEach((position) => {
+            this.body.push(grid.getCell(position[0], position[1]));
+        });
     }
 
     getFacing() : Direction {

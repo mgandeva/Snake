@@ -1,8 +1,7 @@
+import { INITIAL_SNAKE_POSITIONS } from "../constants/game-settings.constants";
 import { Direction } from "../enums/direction.enum";
 import { Cell } from "./cell.model";
 import { Grid } from "./grid.model";
-
-const INITIAL_SNAKE_POSITIONS = [[0,7], [0,6], [0,5]];
 
 export class Snake {
     private headIndex: number = 0;

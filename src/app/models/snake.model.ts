@@ -15,11 +15,11 @@ export class Snake {
         });
     }
 
-    get facing() : Direction {
+    get facing(): Direction {
         return this._facing;
     }
 
-    get head() : Cell {
+    get head(): Cell {
         return this.body[this.headIndex];
     }
 

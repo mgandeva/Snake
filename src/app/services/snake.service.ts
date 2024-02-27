@@ -1,11 +1,14 @@
 import { Injectable } from '@angular/core';
 import { Snake } from '../models/snake.model';
 import { Direction } from '../enums/direction.enum';
+import { DirectionHelper } from '../helpers/direction.helper';
 
 @Injectable({
     providedIn: 'root',
 })
 export class SnakeService {
+    constructor(private directionHelper: DirectionHelper) {}
+    
     changeDirection(snake: Snake, direction: Direction) {
         const canChangeDirection = this.canChangeDirection(
             direction,
@@ -20,17 +23,8 @@ export class SnakeService {
         wantedDirection: Direction,
         givenDirection: Direction
     ): boolean {
-        const directions = [wantedDirection, givenDirection];
+        var givenDirectionOpposite = this.directionHelper.getOppositeDirection(givenDirection);
 
-        const directionsOnHorizontalAxis = directions.filter(direction =>
-            direction === Direction.LEFT || 
-            direction === Direction.RIGHT
-        ).length;
-
-        // If both the wanted and given direction are on the same axis,
-        // directionsOnHorizontalAxis is even.
-        const onTheSameAxis = directionsOnHorizontalAxis % 2 === 0;
-
-        return !onTheSameAxis;
+        return !(wantedDirection === givenDirection || wantedDirection === givenDirectionOpposite);
     }
 }

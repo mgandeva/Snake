@@ -7,7 +7,7 @@ export class Snake {
     private headIndex: number = 0;
     private _body: Cell[] = [];
     private _facing: Direction = Direction.RIGHT;
-    private movementDirection: Direction = Direction.RIGHT;
+    private _movementDirection: Direction = Direction.RIGHT;
 
     constructor(grid: Grid){
         INITIAL_SNAKE_POSITIONS.forEach((position) => {
@@ -27,12 +27,12 @@ export class Snake {
         return this.body[this.headIndex];
     }
   
-    getMovementDirection(): Direction {
-        return this.movementDirection;
+    get movementDirection(): Direction {
+        return this._movementDirection;
     }
 
     setMovementDirection(direction: Direction): void {
-        this.movementDirection = direction;
+        this._movementDirection = direction;
     }
   
     containsCell(cell: Cell): boolean {

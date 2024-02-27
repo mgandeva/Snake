@@ -7,13 +7,13 @@ import { Direction } from '../enums/direction.enum';
 })
 export class SnakeService {
   changeDirection(snake: Snake, direction: Direction) {
-    const canChangeDirection = this.canChangeDirection(
-      direction,
-      snake.getFacing()
-    );
-    if (canChangeDirection) {
-      snake.setMovementDirection(direction);
-    }
+      const canChangeDirection = this.canChangeDirection(
+          direction,
+          snake.facing
+      );
+      if (canChangeDirection) {
+          snake.setMovementDirection(direction);
+      }
   }
 
   private canChangeDirection(
@@ -22,12 +22,14 @@ export class SnakeService {
   ): boolean {
     const directions = [wantedDirection, givenDirection];
 
-    const filteredRowAxes = directions.filter(
-      (direction) =>
-        direction === Direction.LEFT || direction === Direction.RIGHT
-    ).length;
+        const directionsOnHorizontalAxis = directions.filter(direction =>
+            direction === Direction.LEFT || 
+            direction === Direction.RIGHT
+        ).length;
 
-    const onTheSameAxis = filteredRowAxes === 2 || filteredRowAxes === 0;
+        // If both the wanted and given direction are on the same axis,
+        // directionsOnHorizontalAxis is even.
+        const onTheSameAxis = directionsOnHorizontalAxis % 2 === 0;
 
     return !onTheSameAxis;
   }

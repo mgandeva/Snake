@@ -1,26 +1,30 @@
-import { Direction } from '../enums/direction.enum';
-import { Cell } from './cell.model';
-import { Grid } from './grid.model';
+import { INITIAL_SNAKE_POSITIONS } from "../constants/game-settings.constants";
+import { Direction } from "../enums/direction.enum";
+import { Cell } from "./cell.model";
+import { Grid } from "./grid.model";
 
 export class Snake {
     private headIndex: number = 0;
-    private _body: Cell[];
-    private facing: Direction = Direction.RIGHT;
+    private _body: Cell[] = [];
+    private _facing: Direction = Direction.RIGHT;
     private movementDirection: Direction = Direction.RIGHT;
 
     constructor(grid: Grid){
-        this._body = [
-            grid.getCell(0, 7),
-            grid.getCell(0,6),
-            grid.getCell(0,5)];
+        INITIAL_SNAKE_POSITIONS.forEach((position) => {
+            this.body.push(grid.getCell(position[0], position[1]));
+        });
     }
 
     get body(): Cell[] {
         return this._body;
     }
 
-    getFacing() : Direction {
-        return this.facing;
+    get facing(): Direction {
+        return this._facing;
+    }
+
+    get head(): Cell {
+        return this.body[this.headIndex];
     }
   
     getMovementDirection(): Direction {
@@ -34,15 +38,11 @@ export class Snake {
     containsCell(cell: Cell): boolean {
       return this._body.some(snakeCell => snakeCell === cell);
     }
-
-    getHead(): Cell {
-        return this._body[0];
-    }
   
     move() {
         this._body = this._body.map((cell: Cell, index: number) => {
             if (index === this.headIndex) {
-                this.facing = this.movementDirection;
+                this._facing = this.movementDirection;
                 return cell.getNeighbour(this.movementDirection);
             }
             
@@ -53,9 +53,7 @@ export class Snake {
     hasEatenSelf(): boolean {
         const [head, ...tail] = this.body;
 
-        if(tail.some(tailCell => tailCell === head))
-            return true;
-        return false;
+        return tail.some(tailCell => tailCell === head);
     }
 
     grow(grid: Grid) {

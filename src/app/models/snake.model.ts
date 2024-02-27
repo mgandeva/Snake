@@ -15,15 +15,15 @@ export class Snake {
         });
     }
 
-    get facing() : Direction {
+    get facing(): Direction {
         return this._facing;
     }
 
-    get head() : Cell {
+    get head(): Cell {
         return this.body[this.headIndex];
     }
 
-    getMovementDirection() : Direction {
+    getMovementDirection(): Direction {
         return this.movementDirection;
     }
 
@@ -50,5 +50,12 @@ export class Snake {
         const [head, ...tail] = this.body;
 
         return tail.some(tailCell => tailCell === head);
+    }
+
+    grow(grid: Grid) {
+        const tailEnd = this.body[this.body.length - 1];
+        const newTailEnd = new Cell(grid, tailEnd.row, tailEnd.column);
+
+        return this.body.push(newTailEnd);
     }
 }

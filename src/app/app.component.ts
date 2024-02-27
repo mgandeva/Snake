@@ -42,8 +42,7 @@ export class AppComponent implements OnInit {
   @HostListener('window:keydown', ['$event'])
   onKeypress(event: KeyboardEvent) {
     const direction = getDirection(event.key);
-
-    this.snakeService.changeDirection(this.snake, direction);
+    direction && this.snakeService.changeDirection(this.snake, direction);
   }
 
   getGridCellClass(row: number, column: number): string {
@@ -65,18 +64,14 @@ export class AppComponent implements OnInit {
   }
 
   isGameOver(): boolean {
-    if(this.snake.getHead() === this.grid.getOutOfBoundsCell()){
+    if(this.snake.head === this.grid.getOutOfBoundsCell()){
         return true;
     }
-    if(this.snake.hasEatenSelf()){
-      return true;
-    }
-    return false;
+    return this.snake.hasEatenSelf();
   }
 
   eatFood() {
-    const snakeHead = this.snake.body[0];
-    if (snakeHead === this.food.cell) {
+    if (this.snake.head === this.food.cell) {
       this.snake.grow(this.grid);
       this.food.generateRandomFood(this.snake);
     }

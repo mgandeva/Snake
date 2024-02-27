@@ -4,6 +4,7 @@ export class Grid {
     private rowCount: number;
     private columnCount: number;
     private cells: Cell[][];
+    private outOfBoundsCell: Cell;
 
     constructor(rows: number, columns: number) {
         this.rowCount = rows;
@@ -15,12 +16,19 @@ export class Grid {
                 this.cells[r][c] = new Cell(this, r, c);
             }
         }
+        this.outOfBoundsCell = new Cell(this, -1, -1);
     }
 
-    getCell(row: number, col: number): Cell{
-        const normalizedRow = (row + this.rowCount) % this.rowCount;
-        const normalizedCol = (col + this.columnCount) % this.columnCount;
+    getCell(row: number, col: number): Cell {
+        if(row < 0 || this.rowCount <= row ||
+           col < 0 || this.columnCount <= col){
+           return this.outOfBoundsCell;
+        }
 
-        return this.cells[normalizedRow][normalizedCol];
+        return this.cells[row][col];
+    }
+
+    getOutOfBoundsCell(): Cell {
+        return this.outOfBoundsCell;
     }
 }

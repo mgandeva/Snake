@@ -9,7 +9,7 @@ export class SnakeService {
     changeDirection(snake: Snake, direction: Direction) {
         const canChangeDirection = this.canChangeDirection(
             direction,
-            snake.getFacing()
+            snake.facing
         );
         if (canChangeDirection) {
             snake.setMovementDirection(direction);

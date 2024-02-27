@@ -6,7 +6,7 @@ import { Grid } from "./grid.model";
 export class Snake {
     private headIndex: number = 0;
     private body: Cell[] = [];
-    private facing: Direction = Direction.RIGHT;
+    private _facing: Direction = Direction.RIGHT;
     private movementDirection: Direction = Direction.RIGHT;
 
     constructor(grid: Grid){
@@ -15,8 +15,12 @@ export class Snake {
         });
     }
 
-    getFacing() : Direction {
-        return this.facing;
+    get facing() : Direction {
+        return this._facing;
+    }
+
+    get head() : Cell {
+        return this.body[this.headIndex];
     }
 
     getMovementDirection() : Direction {
@@ -34,7 +38,7 @@ export class Snake {
     move() {
         this.body = this.body.map((cell: Cell, index: number) => {
             if (index === this.headIndex) {
-                this.facing = this.movementDirection;
+                this._facing = this.movementDirection;
                 return cell.getNeighbour(this.movementDirection);
             }
             

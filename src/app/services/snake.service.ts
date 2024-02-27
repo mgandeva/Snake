@@ -3,24 +3,24 @@ import { Snake } from '../models/snake.model';
 import { Direction } from '../enums/direction.enum';
 
 @Injectable({
-  providedIn: 'root',
+    providedIn: 'root',
 })
 export class SnakeService {
-  changeDirection(snake: Snake, direction: Direction) {
-      const canChangeDirection = this.canChangeDirection(
-          direction,
-          snake.facing
-      );
-      if (canChangeDirection) {
-          snake.setMovementDirection(direction);
-      }
-  }
+    changeDirection(snake: Snake, direction: Direction) {
+        const canChangeDirection = this.canChangeDirection(
+            direction,
+            snake.facing
+        );
+        if (canChangeDirection) {
+            snake.setMovementDirection(direction);
+        }
+    }
 
-  private canChangeDirection(
-    wantedDirection: Direction,
-    givenDirection: Direction
-  ): boolean {
-    const directions = [wantedDirection, givenDirection];
+    private canChangeDirection(
+        wantedDirection: Direction,
+        givenDirection: Direction
+    ): boolean {
+        const directions = [wantedDirection, givenDirection];
 
         const directionsOnHorizontalAxis = directions.filter(direction =>
             direction === Direction.LEFT || 
@@ -31,6 +31,6 @@ export class SnakeService {
         // directionsOnHorizontalAxis is even.
         const onTheSameAxis = directionsOnHorizontalAxis % 2 === 0;
 
-    return !onTheSameAxis;
-  }
+        return !onTheSameAxis;
+    }
 }

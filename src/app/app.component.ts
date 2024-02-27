@@ -14,6 +14,9 @@ import { Wall } from './models/wall.model';
 import { WallService } from './services/wall.service';
 import { DirectionHelper } from './helpers/direction.helper';
 import { FrameTimeUpdateType } from './enums/frameTimeUpdateType.enum';
+import { Cell } from './models/cell.model';
+import { RandomHelper } from './helpers/random.helper';
+import { Direction } from './enums/direction.enum';
 
 @Component({
   selector: 'snake-app',
@@ -21,11 +24,11 @@ import { FrameTimeUpdateType } from './enums/frameTimeUpdateType.enum';
   styleUrl: './app.component.scss',
 })
 export class AppComponent implements OnInit {
-  private grid: Grid = new Grid(GRID_ROWS, GRID_COLUMNS);
+  private grid: Grid = new Grid(GRID_ROWS, GRID_COLUMNS, this.randomHelper);
   private snake: Snake = new Snake(this.grid);
-  private food: Food = new Food(this.grid);
-  private walls: Wall[];
   private frameTime = MAX_FRAME_TIME;
+  private food: Food;
+  private walls: Wall[];
 
   rows: number[] = [...Array(GRID_ROWS).keys()];
   columns: number[] = [...Array(GRID_COLUMNS).keys()];
@@ -33,10 +36,12 @@ export class AppComponent implements OnInit {
 
   constructor(
     private snakeService: SnakeService, 
-      private wallService: WallService,
-      private directionHelper: DirectionHelper
+    private wallService: WallService,
+    private directionHelper: DirectionHelper,
+    private randomHelper: RandomHelper
   ) {
-    this.walls = wallService.generateWalls(this.grid, this.snake, this.food);
+    this.walls = wallService.generateWalls(this.grid, this.snake);
+    this.food = new Food(this.grid, this.snake, this.walls);
   }
 
   ngOnInit(): void {
@@ -72,35 +77,63 @@ export class AppComponent implements OnInit {
       return;
     }
 
-    this.snakeService.changeDirection(this.snake, direction);
+    direction && this.snakeService.changeDirection(this.snake, direction);
   }
 
-  getGridCellClass(row: number, column: number): string {
+  getGridCellClasses(row: number, column: number): string {
     const cell = this.grid.getCell(row, column);
-
-    if (this.snake.containsCell(cell)) {
-      return 'snake-cell';
-    }
 
     if (this.food.cell === cell) {
       return 'food-cell';
     }
 
-    const isCellWall = this.walls.some(wall => 
-      wall.cells.some(wallCell => wallCell == cell));
-    if (isCellWall) {
-      return 'wall-cell';
+    let classes = cell.isLightColoured() 
+      ? 'empty-cell-light' 
+      : 'empty-cell-middle';
+
+    if (this.isCellWall(cell)) {
+      classes += this.getWallClasses(cell);
+    }
+    else if (this.snake.containsCell(cell)) {
+      return 'snake-cell';
     }
 
-    if (cell.isLightColoured()) {
-      return 'empty-cell-light';
-    }
-
-    return 'empty-cell-middle';
+    return classes;
   }
 
-  isGameOver(): boolean {
-    if(this.snake.getHead() === this.grid.getOutOfBoundsCell()){
+  private isCellWall(cell: Cell): boolean {
+    return this.walls.some(wall => 
+      wall.cells.some(wallCell => wallCell === cell));
+  }
+
+  private getWallClasses(cell: Cell): string {
+    let classes = '';
+
+    const upperCell = cell.getNeighbour(Direction.UP);
+    if (cell.row > 0 && !this.isCellWall(upperCell)) {
+      classes += ' border-top';
+    }
+    
+    const lowerCell = cell.getNeighbour(Direction.DOWN);
+    if (cell.row < GRID_ROWS - 1 && !this.isCellWall(lowerCell)) {
+      classes += ' border-bottom';
+    }
+    
+    const leftCell = cell.getNeighbour(Direction.LEFT);
+    if (cell.column > 0 && !this.isCellWall(leftCell)) {
+      classes += ' border-left';
+    }
+    
+    const rightCell = cell.getNeighbour(Direction.RIGHT);
+    if (cell.column < GRID_COLUMNS - 1 && !this.isCellWall(rightCell)) {
+      classes += ' border-right';
+    }
+
+    return classes;
+  }
+
+  private isGameOver(): boolean {
+    if(this.snake.head === this.grid.getOutOfBoundsCell()){
         return true;
     }
 
@@ -111,12 +144,11 @@ export class AppComponent implements OnInit {
     return this.walls.some(wall => wall.hasColision(this.snake));
   }
 
-  eatFood() {
-    const snakeHead = this.snake.body[0];
-    if (snakeHead === this.food.cell) {
+  private eatFood() {
+    if (this.snake.head === this.food.cell) {
       this.snake.grow(this.grid);
       this.score += 10;
-      this.food.generateRandomFood(this.snake);
+      this.food.generateRandomFood(this.snake, this.walls);
     }
   }
 

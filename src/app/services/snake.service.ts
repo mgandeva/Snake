@@ -4,7 +4,7 @@ import { Direction } from '../enums/direction.enum';
 import { DirectionHelper } from '../helpers/direction.helper';
 
 @Injectable({
-  providedIn: 'root',
+    providedIn: 'root',
 })
 export class SnakeService {
     constructor(private directionHelper: DirectionHelper) {}
@@ -12,7 +12,7 @@ export class SnakeService {
     changeDirection(snake: Snake, direction: Direction) {
         const canChangeDirection = this.canChangeDirection(
             direction,
-            snake.movementDirection
+            snake.facing
         );
         if (canChangeDirection) {
             snake.setMovementDirection(direction);

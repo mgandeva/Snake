@@ -9,3 +9,9 @@ export const MAX_FRAME_TIME = 250;
 export const FRAME_TIME_STEP = 100;
 
 export const HIGHSCORE_LIST_LENGTH = 10;
+
+export const INITIAL_SNAKE_POSITIONS: number[][] = [
+  [0, 7],
+  [0, 6],
+  [0, 5],
+];

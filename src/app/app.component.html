@@ -20,7 +20,7 @@
       <div class="cells">
         <div *ngFor="let column of columns">
           <div *ngFor="let row of rows">
-            <div class="cell" [ngClass]="getGridCellClass(row, column)"></div>
+            <div class="cell" [ngClass]="getGridCellClasses(row, column)"></div>
           </div>
         </div>
       </div>

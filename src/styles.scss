@@ -1,5 +1,6 @@
 :root {
   // black colors
+  --pure-black: #000000;
   --dark-black: #101014;
   --light-black: #282a2d;
 
@@ -7,8 +8,17 @@
   --light-green: #5ac413;
   --electric-green: #00e339;
 
+  // red colors
+  --light-red: #ff074e;
+
+  // blue colors
+  --mild-blue: #0000a2;
+
   // purple colors
   --electric-purple: #a438f9;
+
+  // yellow colors
+  --yellow: #f0f32f;
 }
 
 body {

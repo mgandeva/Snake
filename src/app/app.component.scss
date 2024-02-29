@@ -1,3 +1,7 @@
+$cell-dimentions: 30px;
+$grid-rows: 15;
+$grid-columns: 20;
+
 .container {
   height: 100%;
   display: flex;
@@ -14,9 +18,34 @@
   border: solid var(--electric-purple) 3px;
 
   .cell {
-    width: 30px;
-    height: 30px;
-    box-sizing: border-box; 
+    width: $cell-dimentions;
+    height: $cell-dimentions;
+    box-sizing: border-box;
+  }
+}
+
+.game-over {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: $grid-columns * $cell-dimentions;
+  height: $grid-rows * $cell-dimentions;
+  background-color: var(--pure-black);
+
+  box-sizing: border-box;
+  border: solid var(--electric-purple) 3px;
+
+  .headline {
+    font-size: 42px;
+    color: var(--light-red);
+    font-family: "Press Start 2P", cursive;
+  }
+
+  p {
+    font-size: 14px;
+    color: var(--yellow);
+    font-family: "Press Start 2P", cursive;
   }
 }
 
@@ -72,5 +101,71 @@
   font-family: "Press Start 2P", cursive;
   gap: 10px;
   font-size: large;
-  color: #feeb2c;
+  color: var(--yellow);
+}
+
+.input {
+  display: flex;
+  flex-direction: row;
+
+  input {
+    background-color: var(--pure-black);
+    height: 30px;
+    margin-left: 5px;
+    margin-top: 5px;
+    color: var(--yellow);
+    font-family: "Press Start 2P", cursive;
+  }
+}
+
+.screens {
+  display: flex;
+  gap: 100px;
+}
+
+.scoreboard {
+  background-color: var(--pure-black);
+  box-sizing: border-box;
+  border: solid var(--electric-purple) 3px;
+  padding: 10px 30px;
+  height: $grid-rows * $cell-dimentions;
+  overflow-x: hidden;
+  overflow-y: scroll;
+}
+
+::-webkit-scrollbar {
+  display: none;
+}
+
+.high-scores-title p {
+  font-size: 22px;
+  color: var(--light-red);
+  font-family: "Press Start 2P", cursive;
+  text-align: center;
+}
+
+.highscore-table {
+  width: 400px;
+  border-spacing: 0 20px;
+  border-spacing: 0 20;
+}
+
+.headings {
+  display: flex;
+
+  width: 100%;
+  gap: 20px;
+  justify-content: space-between;
+
+  p {
+    font-family: "Press Start 2P", cursive;
+    color: var(--yellow);
+  }
+}
+
+.results {
+  display: flex;
+  color: var(--mild-blue);
+  font-family: "Press Start 2P";
+  justify-content: space-between;
 }

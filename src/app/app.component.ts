@@ -6,7 +6,7 @@ import {
   GRID_COLUMNS,
   GRID_ROWS,
   MAX_FRAME_TIME,
-  MIN_FRAME_TIME
+  MIN_FRAME_TIME,
 } from './constants/game-settings.constants';
 import { SnakeService } from './services/snake.service';
 import { Grid } from './models/grid.model';
@@ -14,6 +14,7 @@ import { Wall } from './models/wall.model';
 import { WallService } from './services/wall.service';
 import { DirectionHelper } from './helpers/direction.helper';
 import { FrameTimeUpdateType } from './enums/frameTimeUpdateType.enum';
+import { Highscore } from './models/highscore.model';
 import { Cell } from './models/cell.model';
 import { RandomHelper } from './helpers/random.helper';
 import { Direction } from './enums/direction.enum';
@@ -29,13 +30,16 @@ export class AppComponent implements OnInit {
   private frameTime = MAX_FRAME_TIME;
   private food: Food;
   private walls: Wall[];
+  playerName: string = '';
+  shouldEnterHighscore = false;
+  score = 0;
+  highscores: Highscore = new Highscore();
 
   rows: number[] = [...Array(GRID_ROWS).keys()];
   columns: number[] = [...Array(GRID_COLUMNS).keys()];
-  score = 0;
 
   constructor(
-    private snakeService: SnakeService, 
+    private snakeService: SnakeService,
     private wallService: WallService,
     private directionHelper: DirectionHelper,
     private randomHelper: RandomHelper
@@ -45,25 +49,29 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    const runTime = () => {
-      setTimeout(
-        () => {
-          this.snake.move();
-
-          if(!this.isGameOver()) {
-            this.eatFood();
-            runTime();
-          }
-        }, 
-        this.frameTime
-      );
-    };
-
-    runTime();
+    this.run();
   }
 
   @HostListener('window:keydown', ['$event'])
   onKeypress(event: KeyboardEvent) {
+    if (this.isGameOver() &&
+      this.shouldEnterHighscore &&
+      event.key === 'Enter'
+    ) {
+      this.highscores.addNewHighscore({
+        name: this.playerName,
+        score: this.score,
+      });
+      this.shouldEnterHighscore = false;
+      return;
+    }
+
+    if (this.canRestart()) {
+      this.restart();
+      this.run();
+      return;
+    }
+
     const direction = this.directionHelper.getDirection(event.key);
 
     if (direction === this.snake.movementDirection) {
@@ -71,13 +79,18 @@ export class AppComponent implements OnInit {
       return;
     }
 
-    const snakeMovementDirectionOpposite = this.directionHelper.getOppositeDirection(this.snake.movementDirection);
+    const snakeMovementDirectionOpposite =
+      this.directionHelper.getOppositeDirection(this.snake.movementDirection);
     if (direction === snakeMovementDirectionOpposite) {
       this.updateFrameTime(FrameTimeUpdateType.Increase);
       return;
     }
 
     direction && this.snakeService.changeDirection(this.snake, direction);
+  }
+
+  canRestart(): boolean {
+    return this.isGameOver() && !this.shouldEnterHighscore;
   }
 
   getGridCellClasses(row: number, column: number): string {
@@ -87,14 +100,13 @@ export class AppComponent implements OnInit {
       return 'food-cell';
     }
 
-    let classes = cell.isLightColoured() 
-      ? 'empty-cell-light' 
+    let classes = cell.isLightColoured()
+      ? 'empty-cell-light'
       : 'empty-cell-middle';
 
     if (this.isCellWall(cell)) {
       classes += this.getWallClasses(cell);
-    }
-    else if (this.snake.containsCell(cell)) {
+    } else if (this.snake.containsCell(cell)) {
       return 'snake-cell';
     }
 
@@ -102,8 +114,9 @@ export class AppComponent implements OnInit {
   }
 
   private isCellWall(cell: Cell): boolean {
-    return this.walls.some(wall => 
-      wall.cells.some(wallCell => wallCell === cell));
+    return this.walls.some((wall) =>
+      wall.cells.some((wallCell) => wallCell === cell)
+    );
   }
 
   private getWallClasses(cell: Cell): string {
@@ -113,17 +126,17 @@ export class AppComponent implements OnInit {
     if (cell.row > 0 && !this.isCellWall(upperCell)) {
       classes += ' border-top';
     }
-    
+
     const lowerCell = cell.getNeighbour(Direction.DOWN);
     if (cell.row < GRID_ROWS - 1 && !this.isCellWall(lowerCell)) {
       classes += ' border-bottom';
     }
-    
+
     const leftCell = cell.getNeighbour(Direction.LEFT);
     if (cell.column > 0 && !this.isCellWall(leftCell)) {
       classes += ' border-left';
     }
-    
+
     const rightCell = cell.getNeighbour(Direction.RIGHT);
     if (cell.column < GRID_COLUMNS - 1 && !this.isCellWall(rightCell)) {
       classes += ' border-right';
@@ -132,16 +145,16 @@ export class AppComponent implements OnInit {
     return classes;
   }
 
-  private isGameOver(): boolean {
-    if(this.snake.head === this.grid.getOutOfBoundsCell()){
-        return true;
-    }
-
-      if (this.snake.hasEatenSelf()) {
+  isGameOver(): boolean {
+    if (this.snake.head === this.grid.getOutOfBoundsCell()) {
       return true;
     }
-    
-    return this.walls.some(wall => wall.hasColision(this.snake));
+
+    if (this.snake.hasEatenSelf()) {
+      return true;
+    }
+
+    return this.walls.some((wall) => wall.hasColision(this.snake));
   }
 
   private eatFood() {
@@ -153,11 +166,38 @@ export class AppComponent implements OnInit {
   }
 
   private updateFrameTime(frameTimeUpdateType: FrameTimeUpdateType) {
-    const updatedFrameTime = this.frameTime + FRAME_TIME_STEP * frameTimeUpdateType;
-    if (updatedFrameTime < MIN_FRAME_TIME || updatedFrameTime > MAX_FRAME_TIME) {
+    const updatedFrameTime =
+      this.frameTime + FRAME_TIME_STEP * frameTimeUpdateType;
+    if (
+      updatedFrameTime < MIN_FRAME_TIME ||
+      updatedFrameTime > MAX_FRAME_TIME
+    ) {
       return;
     }
 
     this.frameTime = updatedFrameTime;
+  }
+
+  private run() {
+    setTimeout(() => {
+      this.snake.move();
+
+      if (!this.isGameOver()) {
+        this.eatFood();
+        this.run();
+      } else {
+        this.shouldEnterHighscore = this.highscores.isHighscore(this.score);
+      }
+    }, this.frameTime);
+  }
+
+  private restart() {
+    this.snake = new Snake(this.grid);
+    this.shouldEnterHighscore = false;
+    this.playerName = '';
+    this.score = 0;
+    this.frameTime = MAX_FRAME_TIME;
+    this.walls = this.wallService.generateWalls(this.grid, this.snake);
+    this.food = new Food(this.grid, this.snake, this.walls);
   }
 }

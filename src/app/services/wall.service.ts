@@ -14,12 +14,12 @@ import { Food } from '../models/food.model';
 export class WallService {
     constructor(private randomHelper: RandomHelper) {}
 
-    generateWalls(grid: Grid, snake: Snake, food: Food): Wall[] {
+    generateWalls(grid: Grid, snake: Snake): Wall[] {
         const wallsCount = this.randomHelper.randomNumber(MIN_WALLS_COUNT, MAX_WALLS_COUNT);
 
-        let occupiedCells = snake.body.concat(food.cell);
+        let occupiedCells = snake.body;
 
-        let walls: Wall[] = [];
+        const walls: Wall[] = [];
         for(let i = 0; i < wallsCount; i++) {
             const template = this.getRandomWallTemplate();
             const wall = this.generateWall(template, grid, occupiedCells);
@@ -50,7 +50,7 @@ export class WallService {
             const wall = new Wall(grid, template, firstWallCell);
 
             const wallHasColisions = wall.cells.some(wallCell => 
-                occupiedCells.some(occupiedCell => occupiedCell == wallCell));
+                occupiedCells.some(occupiedCell => occupiedCell === wallCell));
             if (!wallHasColisions) {
                 return wall;
             }

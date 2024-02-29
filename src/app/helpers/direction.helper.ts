@@ -5,7 +5,7 @@ import { Direction } from '../enums/direction.enum';
     providedIn: 'root',
 })
 export class DirectionHelper {
-    getDirection(key: string): Direction {
+    getDirection(key: string): Direction | null {
         switch (key) {
             case 'ArrowLeft':
                 return Direction.LEFT;
@@ -14,12 +14,13 @@ export class DirectionHelper {
             case 'ArrowDown':
                 return Direction.DOWN;
             case 'ArrowRight':
-            default:
                 return Direction.RIGHT;
+            default:
+                return null
         }
     }
 
-    getOppositeDirection(direction: Direction): Direction {
+    getOppositeDirection(direction: Direction): Direction | null {
         switch (direction) {
             case Direction.LEFT:
                 return Direction.RIGHT;
@@ -28,8 +29,9 @@ export class DirectionHelper {
             case Direction.UP:
                 return Direction.DOWN;
             case Direction.DOWN:
-            default:
                 return Direction.UP;
+            default:
+                return null;
         }
     }
 }

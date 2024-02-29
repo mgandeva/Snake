@@ -10,6 +10,7 @@
     <div *ngIf="isGameOver(); else elseBlock">
       <div class="game-over">
         <p class="headline">Game over!</p>
+        <p *ngIf="canRestart()">Press any key to start again!</p>
         <div class="input" *ngIf="shouldEnterHighscore">
           <p>Enter name:</p>
           <input type="text" id="playerName" [(ngModel)]="playerName" />
@@ -20,7 +21,7 @@
       <div class="cells">
         <div *ngFor="let column of columns">
           <div *ngFor="let row of rows">
-            <div class="cell" [ngClass]="getGridCellClass(row, column)"></div>
+            <div class="cell" [ngClass]="getGridCellClasses(row, column)"></div>
           </div>
         </div>
       </div>

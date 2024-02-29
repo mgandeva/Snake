@@ -24,7 +24,7 @@ export class Wall {
     }
 
     hasColision(snake: Snake): boolean {
-        const snakeHead = snake.getHead();
+        const snakeHead = snake.head;
         return this.containsCell(snakeHead);
     }
 }

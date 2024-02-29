@@ -150,7 +150,7 @@ export class AppComponent implements OnInit {
     return classes;
   }
 
-  private isGameOver(): boolean {
+  isGameOver(): boolean {
     if(this.snake.head === this.grid.getOutOfBoundsCell()){
         return true;
     }

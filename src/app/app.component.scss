@@ -20,6 +20,7 @@ $grid-columns: 20;
   .cell {
     width: $cell-dimentions;
     height: $cell-dimentions;
+    box-sizing: border-box;
   }
 }
 
@@ -57,9 +58,20 @@ $grid-columns: 20;
   background-image: url("./assets/food.png");
 }
 
-.wall-cell {
-  background-color: var(--electric-purple);
-  border-radius: 25%;
+.border-top {
+  border-top: solid var(--electric-purple) 3px;
+}
+
+.border-bottom {
+  border-bottom: solid var(--electric-purple) 3px;
+}
+
+.border-left {
+  border-left: solid var(--electric-purple) 3px;
+}
+
+.border-right {
+  border-right: solid var(--electric-purple) 3px;
 }
 
 .empty-cell-light {

@@ -1,3 +1,4 @@
+import { RandomHelper } from '../helpers/random.helper';
 import { Cell } from './cell.model';
 
 export class Grid {
@@ -6,7 +7,10 @@ export class Grid {
     private cells: Cell[][];
     private outOfBoundsCell: Cell;
 
-    constructor(rows: number, columns: number) {
+    constructor(
+        rows: number, 
+        columns: number, 
+        private randomHelper: RandomHelper) {
         this._rowsCount = rows;
         this._columnsCount = columns;
         this.cells = new Array(this._rowsCount);
@@ -28,21 +32,11 @@ export class Grid {
     }
 
     getCell(row: number, col: number): Cell {
-        return this.getCellBounded(row, col);
-    }
-
-    getCellUnbounded(row: number, col: number): Cell {
-        const normalizedRow = (row + this._rowsCount) % this._rowsCount;
-        const normalizedCol = (col + this._columnsCount) % this._columnsCount;
-
-        return this.cells[normalizedRow][normalizedCol];
-    }
-
-    getCellBounded(row: number, col: number): Cell {
         if(row < 0 || this._rowsCount <= row ||
            col < 0 || this._columnsCount <= col){
            return this.outOfBoundsCell;
         }
+
         return this.cells[row][col];
     }
 
@@ -52,12 +46,8 @@ export class Grid {
 
     getRandomCell() {
         return this.getCell(
-            this.generateRandom(this._rowsCount - 1),
-            this.generateRandom(this._columnsCount - 1)
+            this.randomHelper.randomNumber(0, this._rowsCount - 1),
+            this.randomHelper.randomNumber(0, this._columnsCount - 1)
         );
-    }
-
-    private generateRandom(limit: number) {
-        return Math.floor(Math.random() * limit);
     }
 }

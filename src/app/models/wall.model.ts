@@ -19,7 +19,11 @@ export class Wall {
         return this._cells;
     }
 
+    containsCell(cell: Cell): boolean {
+        return this._cells.some(wallCell => wallCell === cell);
+    }
+
     hasColision(snake: Snake): boolean {
-        return this._cells.some(cell => cell == snake.getHead());
+        return this.containsCell(snake.head);
     }
 }

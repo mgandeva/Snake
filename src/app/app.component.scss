@@ -16,6 +16,7 @@
   .cell {
     width: 30px;
     height: 30px;
+    box-sizing: border-box; 
   }
 }
 
@@ -26,6 +27,22 @@
 
 .food-cell {
   background-image: url("./assets/food.png");
+}
+
+.border-top {
+  border-top: solid var(--electric-purple) 3px;
+}
+
+.border-bottom {
+  border-bottom: solid var(--electric-purple) 3px;
+}
+
+.border-left {
+  border-left: solid var(--electric-purple) 3px;
+}
+
+.border-right {
+  border-right: solid var(--electric-purple) 3px;
 }
 
 .empty-cell-light {

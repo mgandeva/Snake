@@ -5,7 +5,7 @@ import { Grid } from "./grid.model";
 
 export class Snake {
     private headIndex: number = 0;
-    private body: Cell[] = [];
+    private _body: Cell[] = [];
     private _facing: Direction = Direction.RIGHT;
     private movementDirection: Direction = Direction.RIGHT;
 
@@ -15,6 +15,10 @@ export class Snake {
         });
     }
 
+    get body(): Cell[] {
+        return this._body;
+    }
+
     get facing(): Direction {
         return this._facing;
     }
@@ -22,7 +26,7 @@ export class Snake {
     get head(): Cell {
         return this.body[this.headIndex];
     }
-
+  
     getMovementDirection(): Direction {
         return this.movementDirection;
     }
@@ -32,17 +36,17 @@ export class Snake {
     }
   
     containsCell(cell: Cell): boolean {
-      return this.body.some(snakeCell => snakeCell === cell);
+      return this._body.some(snakeCell => snakeCell === cell);
     }
   
     move() {
-        this.body = this.body.map((cell: Cell, index: number) => {
+        this._body = this._body.map((cell: Cell, index: number) => {
             if (index === this.headIndex) {
                 this._facing = this.movementDirection;
                 return cell.getNeighbour(this.movementDirection);
             }
             
-            return this.body[index - 1];
+            return this._body[index - 1];
         });
     }
 

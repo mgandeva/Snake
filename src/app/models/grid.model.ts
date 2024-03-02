@@ -1,27 +1,39 @@
+import { RandomHelper } from '../helpers/random.helper';
 import { Cell } from './cell.model';
 
 export class Grid {
-    private rowCount: number;
-    private columnCount: number;
+    private _rowsCount: number;
+    private _columnsCount: number;
     private cells: Cell[][];
     private outOfBoundsCell: Cell;
 
-    constructor(rows: number, columns: number) {
-        this.rowCount = rows;
-        this.columnCount = columns;
-        this.cells = new Array(this.rowCount);
-        for(let r = 0; r < this.rowCount; r++) {
-            this.cells[r] = new Array(this.rowCount);
-            for(let c = 0; c < this.columnCount; c++) {
+    constructor(
+        rows: number, 
+        columns: number, 
+        private randomHelper: RandomHelper) {
+        this._rowsCount = rows;
+        this._columnsCount = columns;
+        this.cells = new Array(this._rowsCount);
+        for(let r = 0; r < this._rowsCount; r++) {
+            this.cells[r] = new Array(this._rowsCount);
+            for(let c = 0; c < this._columnsCount; c++) {
                 this.cells[r][c] = new Cell(this, r, c);
             }
         }
         this.outOfBoundsCell = new Cell(this, -1, -1);
     }
 
+    get rowsCount() {
+        return this._rowsCount;
+    }
+
+    get columnsCount() {
+        return this._columnsCount;
+    }
+
     getCell(row: number, col: number): Cell {
-        if(row < 0 || this.rowCount <= row ||
-           col < 0 || this.columnCount <= col){
+        if(row < 0 || this._rowsCount <= row ||
+           col < 0 || this._columnsCount <= col){
            return this.outOfBoundsCell;
         }
 
@@ -34,12 +46,8 @@ export class Grid {
 
     getRandomCell() {
         return this.getCell(
-            this.generateRandom(this.rowCount - 1),
-            this.generateRandom(this.columnCount - 1)
+            this.randomHelper.randomNumber(0, this._rowsCount - 1),
+            this.randomHelper.randomNumber(0, this._columnsCount - 1)
         );
-    }
-
-    private generateRandom(limit: number) {
-        return Math.floor(Math.random() * limit);
     }
 }

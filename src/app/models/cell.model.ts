@@ -1,3 +1,4 @@
+import { GRID_COLUMNS, GRID_ROWS } from "../constants/game-settings.constants";
 import { Direction } from "../enums/direction.enum";
 import { Grid } from "./grid.model";
 
@@ -14,14 +15,18 @@ export class Cell {
 
     getNeighbour(direction: Direction): Cell {
         switch(direction) {
-            case Direction.RIGHT:
+            case Direction.RIGHT:{
                 return this.grid.getCell(this.row, this.column + 1);
-            case Direction.LEFT:
+            }
+            case Direction.LEFT:{
                 return this.grid.getCell(this.row, this.column - 1);
-            case Direction.UP:
+            }
+            case Direction.UP:{
                 return this.grid.getCell(this.row - 1, this.column);
-            case Direction.DOWN:
+            }
+            case Direction.DOWN:{
                 return this.grid.getCell(this.row + 1, this.column);
+            }
         }
     }
 

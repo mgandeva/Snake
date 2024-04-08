@@ -18,9 +18,6 @@ export class Grid {
     }
 
     getCell(row: number, col: number): Cell{
-        const normalizedRow = (row + this.rowCount) % this.rowCount;
-        const normalizedCol = (col + this.columnCount) % this.columnCount;
-
-        return this.cells[normalizedRow][normalizedCol];
+      return this.cells[row][col];  
     }
 }

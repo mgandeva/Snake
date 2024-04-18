@@ -54,7 +54,8 @@ export class AppComponent implements OnInit {
 
   @HostListener('window:keydown', ['$event'])
   onKeypress(event: KeyboardEvent) {
-    if (this.isGameOver() &&
+    if (
+      this.isGameOver() &&
       this.shouldEnterHighscore &&
       event.key === 'Enter'
     ) {
@@ -150,10 +151,6 @@ export class AppComponent implements OnInit {
       return true;
     }
 
-    if (this.snake.hasEatenSelf()) {
-      return true;
-    }
-
     return this.walls.some((wall) => wall.hasColision(this.snake));
   }
 
@@ -178,12 +175,20 @@ export class AppComponent implements OnInit {
     this.frameTime = updatedFrameTime;
   }
 
+  eatSnake() {
+    if (this.snake.eatsSelf()) {
+      this.snake.halveLength();
+      this.score = Math.floor(this.score / 2);
+    }
+  }
+
   private run() {
     setTimeout(() => {
       this.snake.move();
 
       if (!this.isGameOver()) {
         this.eatFood();
+        this.eatSnake();
         this.run();
       } else {
         this.shouldEnterHighscore = this.highscores.isHighscore(this.score);

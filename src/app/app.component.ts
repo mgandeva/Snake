@@ -62,6 +62,9 @@ export class AppComponent implements OnInit {
   }
 
   isGameOver(): boolean {
-    return this.snake.head === this.grid.getOutOfBoundsCell();
+    if(this.snake.head === this.grid.getOutOfBoundsCell()){
+        return true;
+    }
+    return this.snake.hasEatenSelf();
   }
 }
